@@ -14,6 +14,13 @@ class _homeScreenState extends State<homeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Menu framer'
+        ),
+        backgroundColor: Colors.amber,
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Container(
           color: Colors.grey[300],
