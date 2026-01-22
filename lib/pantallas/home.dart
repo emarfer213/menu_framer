@@ -9,15 +9,13 @@ class homeScreen extends StatefulWidget {
 
 class _homeScreenState extends State<homeScreen> {
   final _formKey = GlobalKey<FormState>();
-  bool isHover=false;
+  bool isHover = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Menu framer'
-        ),
+        title: Text('Menu framer'),
         backgroundColor: Colors.amber,
         centerTitle: true,
       ),
@@ -45,17 +43,22 @@ class _homeScreenState extends State<homeScreen> {
                 label: Text("Aceptar", style: TextStyle(color: Colors.black)),
               ),
               InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.pushNamed(context, '/registerScreen');
                 },
-                onHover: (val){
+                onHover: (val) {
                   setState(() {
-                    print(Text("¿No tienes una cuenta? Regístrate", style: TextStyle(color: Colors.blue),));
+                    print(
+                      Text(
+                        "¿No tienes una cuenta? Regístrate",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    );
                     isHover = val;
                   });
                 },
                 child: Text("¿No tienes una cuenta? Regístrate"),
-              )
+              ),
             ],
           ),
         ),
