@@ -24,14 +24,17 @@ class _registerScreenState extends State<registerScreen>{
           child: Container(
             color: Colors.grey[300],
             child: Column(
-              spacing: 50,
+              spacing: 25,
               children: [
                 Center(
                   child: SizedBox(
                     width: 300,
                     height: 300,
-                    child: Image.asset("cocina.jpg"),
+                    child: Image.asset("cocina2.jpg"),
                   ),
+                ),
+                Center(
+                  child: Text('Introduzca sus datos'),
                 ),
                 camposTextHomeScreen(),
                 ElevatedButton.icon(
@@ -64,7 +67,7 @@ class camposTextHomeScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 50),
             child: TextFormField(
               decoration: InputDecoration(
-                hintText: "First Name",
+                hintText: "Correo",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -75,7 +78,7 @@ class camposTextHomeScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 50),
             child: TextFormField(
               decoration: InputDecoration(
-                hintText: "Second Name",
+                hintText: "Contraseña",
                 border: OutlineInputBorder(),
               ),
             ),

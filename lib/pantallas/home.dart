@@ -77,7 +77,7 @@ class camposTextHomeScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 50),
             child: TextFormField(
               decoration: InputDecoration(
-                hintText: "First Name",
+                hintText: "Correo",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -88,7 +88,7 @@ class camposTextHomeScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 50),
             child: TextFormField(
               decoration: InputDecoration(
-                hintText: "Second Name",
+                hintText: "Contraseña",
                 border: OutlineInputBorder(),
               ),
             ),
