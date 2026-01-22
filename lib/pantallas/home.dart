@@ -11,43 +11,41 @@ class _homeScreenState extends State<homeScreen> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Container(
-            color: Colors.grey[300],
-            child: Column(
-              spacing: 50,
-              children: [
-                Center(
-                  child: SizedBox(
-                    width: 250,
-                    height: 250,
-                    child: Image.asset("assets/cocina.png"),
-                  ),
+        child: Container(
+          color: Colors.grey[300],
+          child: Column(
+            spacing: 50,
+            children: [
+              Center(
+                child: SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: Image.asset("cocina.jpg"),
                 ),
-                camposTextHomeScreen(),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    //Navigator.pushNamed(context, '/terms_conditions.dart');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(239, 56, 103, 1),
-                  ),
-                  label: Text("GO!!", style: TextStyle(color: Colors.black),),
-                )
-              ],
-            ),
-          )
+              ),
+              camposTextHomeScreen(),
+              ElevatedButton.icon(
+                onPressed: () {
+                  //Navigator.pushNamed(context, '/terms_conditions.dart');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(239, 56, 103, 1),
+                ),
+                label: Text("Aceptar", style: TextStyle(color: Colors.black)),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
 class camposTextHomeScreen extends StatelessWidget {
-  const camposTextHomeScreen({
-    super.key,
-  });
+  const camposTextHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +57,8 @@ class camposTextHomeScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 50),
             child: TextFormField(
               decoration: InputDecoration(
-                  hintText: "First Name",
-                  border: OutlineInputBorder()
+                hintText: "First Name",
+                border: OutlineInputBorder(),
               ),
             ),
           ),
@@ -70,8 +68,8 @@ class camposTextHomeScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 50),
             child: TextFormField(
               decoration: InputDecoration(
-                  hintText: "Second Name",
-                  border: OutlineInputBorder()
+                hintText: "Second Name",
+                border: OutlineInputBorder(),
               ),
             ),
           ),
