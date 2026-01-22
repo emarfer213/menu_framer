@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:menu_framer/pantallas/home.dart';
+import 'package:menu_framer/pantallas/registerScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => homeScreen(),
+        '/registerScreen': (context) => registerScreen(),
       },
     );
   }

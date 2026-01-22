@@ -36,6 +36,12 @@ class _homeScreenState extends State<homeScreen> {
                 ),
                 label: Text("Aceptar", style: TextStyle(color: Colors.black)),
               ),
+              InkWell(
+                onTap: (){
+                  Navigator.pushNamed(context, '/registerScreen');
+                },
+                child: Text("¿No tienes una cuenta? Regístrate", selectionColor: Colors.blue,),
+              )
             ],
           ),
         ),
