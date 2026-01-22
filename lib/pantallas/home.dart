@@ -9,6 +9,7 @@ class homeScreen extends StatefulWidget {
 
 class _homeScreenState extends State<homeScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool isHover=false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,13 @@ class _homeScreenState extends State<homeScreen> {
                 onTap: (){
                   Navigator.pushNamed(context, '/registerScreen');
                 },
-                child: Text("¿No tienes una cuenta? Regístrate", selectionColor: Colors.blue,),
+                onHover: (val){
+                  setState(() {
+                    print(Text("¿No tienes una cuenta? Regístrate", style: TextStyle(color: Colors.blue),));
+                    isHover = val;
+                  });
+                },
+                child: Text("¿No tienes una cuenta? Regístrate"),
               )
             ],
           ),
