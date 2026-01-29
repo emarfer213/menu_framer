@@ -41,7 +41,7 @@ class _registerScreenState extends State<registerScreen> {
               camposTextHomeScreen(),
               ElevatedButton.icon(
                 onPressed: () {
-                  //Navigator.pushNamed(context, '/terms_conditions.dart');
+                  Navigator.pushNamed(context, '/tipoScreen');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromRGBO(239, 56, 103, 1),
