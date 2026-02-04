@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:menu_framer/pantallas/entranteScreen.dart';
 import 'package:menu_framer/pantallas/home.dart';
+import 'package:menu_framer/pantallas/postreScreen.dart';
+import 'package:menu_framer/pantallas/primerPlatoScreen.dart';
 import 'package:menu_framer/pantallas/registerScreen.dart';
+import 'package:menu_framer/pantallas/segundoPlatoScreen.dart';
 import 'package:menu_framer/pantallas/tipoScreen.dart';
 
 void main() {
@@ -18,6 +22,10 @@ class MyApp extends StatelessWidget {
         '/': (context) => homeScreen(),
         '/registerScreen': (context) => registerScreen(),
         '/tipoScreen': (context) => tipoScreen(),
+        '/entranteScreen': (context) => entranteScreen(),
+        '/primerPlatoScreen': (context) => primerPlatoScreen(),
+        '/segundoPlatoScreen': (context) => segundoPlatoScreen(),
+        '/postreScreen': (context) => postreScreen(),
       },
     );
   }

@@ -9,6 +9,7 @@ class tipoScreen extends StatefulWidget {
 
 class _tipoScreenState extends State<tipoScreen> {
   final _formKey = GlobalKey<FormState>();
+  List opciones = ["Entrante", "Primer plato", "Segundo plato", "Postre"];
 
   @override
   Widget build(BuildContext context) {
@@ -19,45 +20,60 @@ class _tipoScreenState extends State<tipoScreen> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Container(
-          padding: EdgeInsetsGeometry.only(top: 80),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              spacing: 20,
-              children: [
-                Center(
-                  child: Container(
-                    width: 300,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Selecciona el tipo de plato",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 354.4,
+              height: 43,
+              child: Align(
+                alignment: AlignmentDirectional(0, 0),
+                child: Text(
+                  'Selecciona el tipo de plato',
+                  style: TextStyle(fontSize: 20, letterSpacing: 0.0),
                 ),
-
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    spacing: 150,
-                    children: [
-                      Text("Entrantes"),
-                      Text("Primer plato"),
-                      Text("Segundo plato"),
-                      Text("Postre"),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: opciones.length,
+                itemBuilder: (context, index) {
+                  return opcion(opciones[index]);
+                },
+              ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget opcion(String nombre) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: ListTile(
+        title: Text(
+          nombre,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 18),
+        ),
+        onTap: () {
+          switch (nombre) {
+            case 'Entrante':
+              Navigator.pushNamed(context, '/entranteScreen');
+              break;
+            case 'Primer plato':
+              Navigator.pushNamed(context, '/primerPlatoScreen');
+              break;
+            case 'Segundo plato':
+              Navigator.pushNamed(context, '/segundoPlatoScreen');
+              break;
+            case 'Postre':
+              Navigator.pushNamed(context, '/postreScreen');
+              break;
+          }
+        },
       ),
     );
   }
