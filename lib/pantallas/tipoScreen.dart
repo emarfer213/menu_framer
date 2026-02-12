@@ -25,6 +25,7 @@ class _tipoScreenState extends State<tipoScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
+              padding: EdgeInsets.only(top: 20),
               width: 354.4,
               height: 43,
               child: Align(
@@ -37,6 +38,7 @@ class _tipoScreenState extends State<tipoScreen> {
             ),
             Expanded(
               child: ListView.builder(
+                padding: EdgeInsets.only(top: 20),
                 itemCount: opciones.length,
                 itemBuilder: (context, index) {
                   return opcion(opciones[index]);
