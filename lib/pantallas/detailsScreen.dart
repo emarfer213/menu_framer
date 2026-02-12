@@ -25,18 +25,13 @@ class _detailsScreentState extends State<detailsScreen> {
       body: SafeArea(
           child: Column(
             children: [
-              Container(
-                child: Text(plato.name),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: plato.ingredientes.entries.map((entry) {
+                  return Text("• ${entry.key}: ${entry.value}");
+                }).toList(),
               ),
-              Container(
-                child: Image.network(plato.thumbnail),
-              ),
-              Container(
-                child: Text(plato.ingredientes.toString()),
-              ),
-              Container(
-                child: plato.instructions,
-              ),
+              Text(plato.instructions.toString()),
             ],
           )),
     );

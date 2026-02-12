@@ -1,14 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-
 class Plato {
   final String id;
   final String name;
   final String category;
-  final Text instructions;
+  final String instructions;
   final String thumbnail;
-  final Map ingredientes;
+  final Map<String, String> ingredientes;
 
   Plato({
     required this.id,
@@ -20,15 +18,19 @@ class Plato {
   });
 
   factory Plato.fromJson(Map<String, dynamic> json) {
-    Map<String, String> ingredientesTemp = {};
-
+    final Map<String, String> ingredientesTemp = {};
 
     for (int i = 1; i <= 20; i++) {
-      if (json['strIngredient$i'] != '') {
-        ingredientesTemp[json['strIngredient$i']]=json['strMeasure$i'];
-      } else {
+      final ingredient = json['strIngredient$i']?.toString().trim();
+
+      // Si es null, vacío o solo espacios → terminamos
+      if (ingredient == null || ingredient.isEmpty) {
         break;
       }
+
+      final measure = json['strMeasure$i']?.toString().trim() ?? '';
+
+      ingredientesTemp[ingredient] = measure;
     }
 
     return Plato(
