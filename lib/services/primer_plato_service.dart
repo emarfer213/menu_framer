@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:menu_framer/models/plato.dart';
 
@@ -36,8 +37,9 @@ class MealService {
         id: json['idMeal'],
         name: json['strMeal'],
         category: category,
-        instructions: '',
+        instructions: Text(''),
         thumbnail: json['strMealThumb'],
+        ingredientes: {},
       )).toList();
     } else {
       throw Exception("Error al cargar comidas");
