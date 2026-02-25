@@ -38,7 +38,7 @@ class MealService {
         category: category,
         instructions: '',
         thumbnail: json['strMealThumb'],
-        ingredientes: {},
+        ingredientes: [],
       )).toList();
     } else {
       throw Exception("Error al cargar comidas");
@@ -94,6 +94,21 @@ class MealService {
       return mealsJson.map((json) => Plato.fromJson(json)).toList();
     } else {
       throw Exception("Error al cargar datos");
+    }
+  }
+
+  Future<Plato> getMealDetail(String id) async {
+    final response = await http.get(
+      Uri.parse("${baseUrl}lookup.php?i=$id"),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final mealJson = data['meals'][0];
+
+      return Plato.fromJson(mealJson);
+    } else {
+      throw Exception("Error al cargar detalle");
     }
   }
 }
