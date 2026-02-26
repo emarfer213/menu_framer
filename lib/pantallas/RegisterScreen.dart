@@ -60,7 +60,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return 'El correo es obligatorio';
                             }
 
-
                             if (!value.contains("@")) {
                               return "Correo no válido";
                             }
