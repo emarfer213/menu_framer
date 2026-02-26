@@ -10,7 +10,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  String? errorMensage;
+  String? errorMesage;
   bool isHover = false;
   String correo = "";
   String contrasenia = "";
@@ -54,15 +54,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               return 'El correo es obligatorio';
                             }
 
-                            if (errorMensage != null) {
-                              return errorMensage;
+                            if (errorMesage != null) {
+                              return errorMesage;
                             }
                             return null;
                           },
                           onChanged: (value) => {
                             setState(() {
                               correo = value;
-                              errorMensage = null; // limpia error al escribir
+                              errorMesage = null; // limpia error al escribir
                             }),
                           },
                         ),
@@ -81,15 +81,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               return "La contraseña es obligatorio";
                             }
 
-                            if (errorMensage != null) {
-                              return errorMensage;
+                            if (errorMesage != null) {
+                              return errorMesage;
                             }
                             return null;
                           },
                           onChanged: (value) => {
                             setState(() {
                               contrasenia = value;
-                              errorMensage = null; // limpia error al escribir
+                              errorMesage = null; // limpia error al escribir
                             }),
                           },
                         ),
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     } on FirebaseAuthException catch (e) {
                       setState(() {
-                        errorMensage = "Valores introducidos incorrectos";
+                        errorMesage = "Valores introducidos incorrectos";
                       });
                       _formKey.currentState!.validate();
                     }

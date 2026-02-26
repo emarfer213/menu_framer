@@ -12,6 +12,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   String correo = "";
   String contrasenia = "";
+  String? errorMesage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -41,41 +42,87 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              Column(
-                spacing: 10,
-                children: [
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 50),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "Correo",
-                          border: OutlineInputBorder(),
+              Form(
+                key: _formKey,
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: "Correo",
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'El correo es obligatorio';
+                            }
+
+
+                            if (!value.contains("@")) {
+                              return "Correo no válido";
+                            }
+
+                            if (errorMesage != null) {
+                              return errorMesage;
+                            }
+                            return null;
+                          },
+                          onChanged: (value) => {
+                            setState(() {
+                              correo = value;
+                              errorMesage = null; // limpia error al escribir
+                            }),
+                          },
                         ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 50),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "Contraseña",
-                          border: OutlineInputBorder(),
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: "Contraseña",
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "La contraseña es obligatorio";
+                            }
+
+                            if (errorMesage != null) {
+                              return errorMesage;
+                            }
+                            return null;
+                          },
+                          onChanged: (value) => {
+                            setState(() {
+                              contrasenia = value;
+                              errorMesage = null; // limpia error al escribir
+                            }),
+                          },
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               ElevatedButton.icon(
                 onPressed: () async {
-                  try {
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(email: correo, password: contrasenia);
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo, password: contrasenia);
-                    Navigator.pop(context);
-                  } on FirebaseAuthException catch (e){
-                    print(e);
+                  if (_formKey.currentState!.validate()) {
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: correo,
+                        password: contrasenia,
+                      );
+                    } on FirebaseAuthException catch (e) {
+                      setState(() {
+                        errorMesage = "Valores introducidos incorrectos";
+                      });
+                      _formKey.currentState!.validate();
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
