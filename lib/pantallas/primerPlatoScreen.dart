@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:menu_framer/models/plato.dart';
-import 'package:menu_framer/services/primer_plato_service.dart';
+import 'package:menu_framer/provider/plato_provider.dart';
 
 class primerPlatoScreen extends StatefulWidget{
   const primerPlatoScreen({super.key});
@@ -10,7 +10,7 @@ class primerPlatoScreen extends StatefulWidget{
 }
 
 class _primerScreentState extends State<primerPlatoScreen> {
-  final MealService _service = MealService();
+  final MealProvider _service = MealProvider();
   late Future<List<Plato>> _meals;
 
   @override

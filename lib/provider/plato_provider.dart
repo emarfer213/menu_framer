@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:menu_framer/models/plato.dart';
 
-class MealService {
+class MealProvider extends ChangeNotifier{
   static const String baseUrl =
       "https://www.themealdb.com/api/json/v1/1/";
 

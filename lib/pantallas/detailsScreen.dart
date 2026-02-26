@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/plato.dart';
-import '../services/primer_plato_service.dart';
+import '../provider/plato_provider.dart';
 
 class detailsScreen extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _detailsScreentState extends State<detailsScreen> {
     super.didChangeDependencies();
     final Plato plato = ModalRoute.of(context)?.settings.arguments as Plato;
 
-    platoFuture = MealService().getMealDetail(plato.id);
+    platoFuture = MealProvider().getMealDetail(plato.id);
   }
 
   @override

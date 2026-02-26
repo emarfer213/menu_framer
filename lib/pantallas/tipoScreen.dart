@@ -63,7 +63,7 @@ class _tipoScreenState extends State<tipoScreen> {
         onTap: () {
           switch (nombre) {
             case 'Entrante':
-              Navigator.pushNamed(context, '/entranteScreen');
+              Navigator.pushNamed(context, '/entranteScreen', arguments: 'Starter');
               break;
             case 'Primer plato':
               Navigator.pushNamed(context, '/primerPlatoScreen');
