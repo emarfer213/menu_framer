@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
 
 import '../models/plato.dart';
-import '../provider/plato_provider.dart';
+import '../provider/MenuProvider.dart';
 
-class postreScreen extends StatefulWidget{
-  const postreScreen({super.key});
+class EntranteScreen extends StatefulWidget {
+  const EntranteScreen({super.key});
 
   @override
-  State<postreScreen> createState() => _postreScreentState();
+  State<EntranteScreen> createState() => _entranteScreentState();
 }
 
-class _postreScreentState extends State<postreScreen> {
-  final MealProvider _service = MealProvider();
+class _entranteScreentState extends State<EntranteScreen> {
+  final MenuProvider _service = MenuProvider();
   late Future<List<Plato>> _meals;
 
   @override
   void initState() {
     super.initState();
-    _meals = _service.getMealsByCategory('Dessert');
+    _meals = _service.getMealsByCategory('Starter');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Postres")),
+      appBar: AppBar(
+        title: const Text("Entrante"),
+        centerTitle: true,
+        backgroundColor: Colors.amber,
+      ),
       body: FutureBuilder<List<Plato>>(
         future: _meals,
         builder: (context, snapshot) {
@@ -48,7 +52,10 @@ class _postreScreentState extends State<postreScreen> {
                 subtitle: Text(meal.category),
                 onTap: () {
                   Navigator.pushNamed(
-                      context, '/detailsScreen', arguments: meal);
+                    context,
+                    '/detailsScreen',
+                    arguments: meal,
+                  );
                 },
               );
             },

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../models/plato.dart';
-import '../provider/plato_provider.dart';
+import '../provider/MenuProvider.dart';
 
-class detailsScreen extends StatefulWidget {
+class DetailsScreen extends StatefulWidget {
   @override
-  State<detailsScreen> createState() => _detailsScreentState();
+  State<DetailsScreen> createState() => _detailsScreentState();
 }
 
-class _detailsScreentState extends State<detailsScreen> {
+class _detailsScreentState extends State<DetailsScreen> {
   late Future<Plato> platoFuture;
 
   @override
@@ -16,7 +16,7 @@ class _detailsScreentState extends State<detailsScreen> {
     super.didChangeDependencies();
     final Plato plato = ModalRoute.of(context)?.settings.arguments as Plato;
 
-    platoFuture = MealProvider().getMealDetail(plato.id);
+    platoFuture = MenuProvider().getMealDetail(plato.id);
   }
 
   @override
@@ -55,7 +55,7 @@ class _detailsScreentState extends State<detailsScreen> {
 
                   SizedBox(height: 20),
 
-                  Center(child: Text(plato.instructions)),
+                  Center(child: Text('Los ingredientes necesarios para la preparacion seran:')),
 
                   SizedBox(height: 20),
 

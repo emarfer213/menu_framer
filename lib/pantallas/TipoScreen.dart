@@ -1,13 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class tipoScreen extends StatefulWidget {
-  const tipoScreen({super.key});
+class TipoScreen extends StatefulWidget {
+  const TipoScreen({super.key});
 
   @override
-  State<tipoScreen> createState() => _tipoScreenState();
+  State<TipoScreen> createState() => _TipoScreenState();
 }
 
-class _tipoScreenState extends State<tipoScreen> {
+class _TipoScreenState extends State<TipoScreen> {
   final _formKey = GlobalKey<FormState>();
   List opciones = ["Entrante", "Primer plato", "Segundo plato", "Postre"];
 
@@ -15,6 +16,40 @@ class _tipoScreenState extends State<tipoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          tooltip: "Cerrar sesión",
+          onPressed: () async {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Cerrar sesión'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: [
+                      Text('Estás a punto de cerrar sesión ¿estás seguro?'),
+                    ],
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.of(context).pop(); // cerrar diálogo
+                    },
+                    child: Text('Aceptar'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Cancelar'),
+                  ),
+                ],
+              ),
+            );
+          },
+          icon: Icon(Icons.person_off, color: Colors.black),
+        ),
         title: Text('Menu framer'),
         backgroundColor: Colors.amber,
         centerTitle: true,

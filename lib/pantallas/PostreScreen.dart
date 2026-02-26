@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:menu_framer/models/plato.dart';
-import 'package:menu_framer/provider/plato_provider.dart';
 
-class primerPlatoScreen extends StatefulWidget{
-  const primerPlatoScreen({super.key});
+import '../models/plato.dart';
+import '../provider/MenuProvider.dart';
+
+class PostreScreen extends StatefulWidget{
+  const PostreScreen({super.key});
 
   @override
-  State<primerPlatoScreen> createState() => _primerScreentState();
+  State<PostreScreen> createState() => _postreScreentState();
 }
 
-class _primerScreentState extends State<primerPlatoScreen> {
-  final MealProvider _service = MealProvider();
+class _postreScreentState extends State<PostreScreen> {
+  final MenuProvider _service = MenuProvider();
   late Future<List<Plato>> _meals;
 
   @override
   void initState() {
     super.initState();
-    _meals = _service.getThreeCategoriesThreeMealsEach();
+    _meals = _service.getMealsByCategory('Dessert');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Recetas")),
+      appBar: AppBar(
+        title: const Text("Postre"),
+        centerTitle: true,
+        backgroundColor: Colors.amber,
+      ),
       body: FutureBuilder<List<Plato>>(
         future: _meals,
         builder: (context, snapshot) {

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../models/plato.dart';
-import '../provider/plato_provider.dart';
+import '../provider/MenuProvider.dart';
 
-class segundoPlatoScreen extends StatefulWidget{
-  const segundoPlatoScreen({super.key});
+class SegundoPlatoScreen extends StatefulWidget{
+  const SegundoPlatoScreen({super.key});
 
   @override
-  State<segundoPlatoScreen> createState() => _segudoScreentState();
+  State<SegundoPlatoScreen> createState() => _segudoScreentState();
 }
 
-class _segudoScreentState extends State<segundoPlatoScreen> {
-  final MealProvider _service = MealProvider();
+class _segudoScreentState extends State<SegundoPlatoScreen> {
+  final MenuProvider _service = MenuProvider();
   late Future<List<Plato>> _meals;
 
   @override
@@ -23,7 +23,11 @@ class _segudoScreentState extends State<segundoPlatoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Segundo plato")),
+      appBar: AppBar(
+        title: const Text("Segundo plato"),
+        centerTitle: true,
+        backgroundColor: Colors.amber,
+      ),
       body: FutureBuilder<List<Plato>>(
         future: _meals,
         builder: (context, snapshot) {
