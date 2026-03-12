@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/plato.dart';
-import '../provider/MenuProvider.dart';
+import '../../models/plato.dart';
+import '../../provider/MenuProvider.dart';
 
 class PostreScreen extends StatefulWidget{
   const PostreScreen({super.key});

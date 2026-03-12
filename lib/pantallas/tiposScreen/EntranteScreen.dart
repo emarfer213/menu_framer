@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 
-import '../models/plato.dart';
-import '../provider/MenuProvider.dart';
+import '../../models/plato.dart';
+import '../../provider/MenuProvider.dart';
 
-class SegundoPlatoScreen extends StatefulWidget{
-  const SegundoPlatoScreen({super.key});
+class EntranteScreen extends StatefulWidget {
+  const EntranteScreen({super.key});
 
   @override
-  State<SegundoPlatoScreen> createState() => _segudoScreentState();
+  State<EntranteScreen> createState() => _entranteScreentState();
 }
 
-class _segudoScreentState extends State<SegundoPlatoScreen> {
+class _entranteScreentState extends State<EntranteScreen> {
   final MenuProvider _service = MenuProvider();
   late Future<List<Plato>> _meals;
 
   @override
   void initState() {
     super.initState();
-    _meals = _service.getMealsByCategory('Miscellaneous');
+    _meals = _service.getMealsByCategory('Starter');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Segundo plato"),
+        title: const Text("Entrante"),
         centerTitle: true,
         backgroundColor: Colors.amber,
       ),
@@ -52,7 +52,10 @@ class _segudoScreentState extends State<SegundoPlatoScreen> {
                 subtitle: Text(meal.category),
                 onTap: () {
                   Navigator.pushNamed(
-                      context, '/detailsScreen', arguments: meal);
+                    context,
+                    '/detailsScreen',
+                    arguments: meal,
+                  );
                 },
               );
             },

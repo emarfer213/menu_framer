@@ -3,12 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:menu_framer/pantallas/DetailsScreen.dart';
-import 'package:menu_framer/pantallas/EntranteScreen.dart';
+import 'package:menu_framer/pantallas/tiposScreen/EntranteScreen.dart';
 import 'package:menu_framer/pantallas/LoginScreen.dart';
-import 'package:menu_framer/pantallas/PostreScreen.dart';
-import 'package:menu_framer/pantallas/PrimerPlatoScreen.dart';
+import 'package:menu_framer/pantallas/tiposScreen/PostreScreen.dart';
+import 'package:menu_framer/pantallas/tiposScreen/PrimerPlatoScreen.dart';
 import 'package:menu_framer/pantallas/RegisterScreen.dart';
-import 'package:menu_framer/pantallas/SegundoPlatoScreen.dart';
+import 'package:menu_framer/pantallas/tiposScreen/SegundoPlatoScreen.dart';
 import 'package:menu_framer/pantallas/TipoScreen.dart';
 import 'package:menu_framer/provider/MenuProvider.dart';
 
