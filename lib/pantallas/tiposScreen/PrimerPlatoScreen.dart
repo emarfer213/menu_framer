@@ -16,7 +16,7 @@ class _primerScreentState extends State<PrimerPlatoScreen> {
   @override
   void initState() {
     super.initState();
-    _meals = _service.getThreeCategoriesThreeMealsEach();
+    _meals = _service.getMealsByCategory('Pork');
   }
 
   @override

@@ -9,7 +9,7 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _detailsScreentState extends State<DetailsScreen> {
-  late Future<Plato> platoFuture;
+  late Future<Plato?> platoFuture;
 
   @override
   void didChangeDependencies() {
@@ -28,7 +28,7 @@ class _detailsScreentState extends State<DetailsScreen> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: FutureBuilder<Plato>(
+        child: FutureBuilder<Plato?>(
           future: platoFuture,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
