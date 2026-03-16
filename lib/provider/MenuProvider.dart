@@ -49,8 +49,6 @@ class MenuProvider extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       final List data = json.decode(response.body);
-
-      // Buscar plato por id
       final mealJson = data.firstWhere((meal) => meal['id'] == id, orElse: () => null);
 
       if (mealJson == null) return null;
