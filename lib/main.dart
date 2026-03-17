@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:menu_framer/pantallas/PasosScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:menu_framer/pantallas/DetailsScreen.dart';
 import 'package:menu_framer/pantallas/tiposScreen/EntranteScreen.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
         '/primerPlatoScreen': (context) => PrimerPlatoScreen(),
         '/segundoPlatoScreen': (context) => SegundoPlatoScreen(),
         '/postreScreen': (context) => PostreScreen(),
-        '/detailsScreen': (context) => DetailsScreen()
+        '/detailsScreen': (context) => DetailsScreen(),
+        '/pasosScreen': (context) => PasosScreen()
       },
       home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),

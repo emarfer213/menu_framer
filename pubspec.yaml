@@ -38,6 +38,7 @@ dependencies:
   provider: ^6.1.5+1
   firebase_auth: ^6.1.4
   firebase_core: ^4.4.0
+  carousel_slider: ^5.1.2
 
 dev_dependencies:
   flutter_test:

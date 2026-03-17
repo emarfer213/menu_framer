@@ -69,7 +69,13 @@ class _detailsScreentState extends State<DetailsScreen> {
                     padding: EdgeInsetsGeometry.only(bottom: 20),
                     child: Center(
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/pasosScreen',
+                            arguments: plato
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.amber,
                         ),
