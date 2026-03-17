@@ -21,11 +21,7 @@ class _detailsScreentState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Menu Framer'),
-        backgroundColor: Colors.amber,
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text('Menu Framer'), backgroundColor: Colors.amber, centerTitle: true),
       body: SafeArea(
         child: FutureBuilder<Plato?>(
           future: platoFuture,
@@ -44,11 +40,7 @@ class _detailsScreentState extends State<DetailsScreen> {
                   Center(
                     child: Container(
                       padding: EdgeInsets.only(top: 20),
-                      child: Image.network(
-                        plato.thumbnail,
-                        height: 400,
-                        width: 400,
-                      ),
+                      child: Image.network(plato.thumbnail, height: 400, width: 400),
                     ),
                   ),
 
@@ -59,8 +51,7 @@ class _detailsScreentState extends State<DetailsScreen> {
                   SizedBox(height: 20),
 
                   ...plato.ingredientes.map(
-                    (ingrediente) =>
-                        Center(child: Text("• ${ingrediente.nombre}: ${ingrediente.medida}")),
+                    (ingrediente) => Center(child: Text("• ${ingrediente.nombre}: ${ingrediente.medida}")),
                   ),
 
                   SizedBox(height: 20),
@@ -70,19 +61,10 @@ class _detailsScreentState extends State<DetailsScreen> {
                     child: Center(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/pasosScreen',
-                            arguments: plato
-                          );
+                          Navigator.pushNamed(context, '/pasosScreen', arguments: plato);
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.amber,
-                        ),
-                        label: Text(
-                          "Intentar",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+                        label: Text("Intentar", style: TextStyle(color: Colors.white, fontSize: 20)),
                       ),
                     ),
                   ),
