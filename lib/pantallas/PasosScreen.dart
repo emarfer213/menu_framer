@@ -144,7 +144,34 @@ class _pasosScreentState extends State<PasosScreen> {
                   child: Center(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/tipoScreen');
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text(
+                                "Estas apunto de finalizar la preparacion de un plato. ¿Deseas continuar?",
+                              ),
+                              content: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () async {
+                                      Navigator.pushNamed(context, '/tipoScreen');
+                                    },
+                                    label: const Row(children: [Icon(Icons.check), Text("Confirmar")]),
+                                  ),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    label: const Row(children: [Icon(Icons.cancel_outlined), Text("Cancelar")]),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
                       },
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
                       label: Text("Terminar", style: TextStyle(color: Colors.white, fontSize: 20)),
