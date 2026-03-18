@@ -56,9 +56,15 @@ class _pasosScreentState extends State<PasosScreen> {
                                 height: double.infinity,
                                 width: MediaQuery.of(context).size.width,
                                 margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: BoxDecoration(border: Border.all(color: Colors.amber, width: 9)),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.amber, width: 9),
+                                  image: DecorationImage(
+                                    image: NetworkImage(plato.thumbnail),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                                 child: Center(
-                                  child: Text(i, style: const TextStyle(fontSize: 19), textAlign: TextAlign.center),
+                                  child: Text(i, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Colors.pink), textAlign: TextAlign.center),
                                 ),
                               ),
 

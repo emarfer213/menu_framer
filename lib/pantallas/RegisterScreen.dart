@@ -82,6 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
+                          obscureText: true,
                           decoration: InputDecoration(
                             hintText: "Contraseña",
                             border: OutlineInputBorder(),
