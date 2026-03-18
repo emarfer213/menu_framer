@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../models/plato.dart';
 import '../provider/MenuProvider.dart';
@@ -10,12 +12,31 @@ class PasosScreen extends StatefulWidget {
 
 class _pasosScreentState extends State<PasosScreen> {
   late Future<Plato?> platoFuture;
+  int _currentSlide = 0;
+  int _elapsedSeconds = 0;
+  Timer? _timer;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final Plato plato = ModalRoute.of(context)?.settings.arguments as Plato;
     platoFuture = MenuProvider().getMealDetail(plato.id);
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    _elapsedSeconds = 0;
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() {
+        _elapsedSeconds++;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -30,6 +51,12 @@ class _pasosScreentState extends State<PasosScreen> {
               return Center(child: CircularProgressIndicator());
             }
 
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_timer == null) {
+                _startTimer();
+              }
+            });
+
             final plato = snapshot.data!;
 
             return Column(
@@ -42,6 +69,12 @@ class _pasosScreentState extends State<PasosScreen> {
                       autoPlay: true,
                       autoPlayInterval: const Duration(seconds: 10),
                       autoPlayAnimationDuration: const Duration(seconds: 2),
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentSlide = index;
+                        });
+                        _startTimer();
+                      },
                     ),
                     items: plato.instructions.asMap().entries.map((entry) {
                       int index = entry.key;
@@ -58,7 +91,7 @@ class _pasosScreentState extends State<PasosScreen> {
                                 margin: const EdgeInsets.symmetric(horizontal: 5.0),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.amber, width: 9),
-                                  image: DecorationImage(image: NetworkImage(plato.thumbnail), fit: BoxFit.cover),
+                                  image: DecorationImage(image: NetworkImage(plato.thumbnail), fit: BoxFit.cover, opacity: 0.7),
                                 ),
                                 child: Center(
                                   child: Text(
@@ -85,6 +118,20 @@ class _pasosScreentState extends State<PasosScreen> {
                                   ),
                                 ),
                               ),
+
+                              if (_currentSlide == index)
+                                Positioned(
+                                  top: 10,
+                                  right: 14,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                                    color: Colors.black54,
+                                    child: Text(
+                                      "Tiempo: $_elapsedSeconds s",
+                                      style: const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
                             ],
                           );
                         },
@@ -96,7 +143,9 @@ class _pasosScreentState extends State<PasosScreen> {
                   padding: EdgeInsetsGeometry.all(50),
                   child: Center(
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/tipoScreen');
+                      },
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
                       label: Text("Terminar", style: TextStyle(color: Colors.white, fontSize: 20)),
                     ),
