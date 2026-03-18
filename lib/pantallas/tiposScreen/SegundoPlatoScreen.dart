@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/plato.dart';
 import '../../provider/MenuProvider.dart';
 
-class SegundoPlatoScreen extends StatefulWidget{
+class SegundoPlatoScreen extends StatefulWidget {
   const SegundoPlatoScreen({super.key});
 
   @override
@@ -23,11 +23,7 @@ class _segudoScreentState extends State<SegundoPlatoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Segundo plato"),
-        centerTitle: true,
-        backgroundColor: Colors.amber,
-      ),
+      appBar: AppBar(title: const Text("Segundo plato"), centerTitle: true, backgroundColor: Colors.amber),
       body: FutureBuilder<List<Plato>>(
         future: _meals,
         builder: (context, snapshot) {
@@ -51,8 +47,7 @@ class _segudoScreentState extends State<SegundoPlatoScreen> {
                 title: Text(meal.name),
                 subtitle: Text(meal.category),
                 onTap: () {
-                  Navigator.pushNamed(
-                      context, '/detailsScreen', arguments: meal);
+                  Navigator.pushNamed(context, '/detailsScreen', arguments: meal);
                 },
               );
             },

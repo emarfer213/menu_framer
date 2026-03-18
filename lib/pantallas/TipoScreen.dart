@@ -24,11 +24,7 @@ class _TipoScreenState extends State<TipoScreen> {
               builder: (context) => AlertDialog(
                 title: Text('Cerrar sesión'),
                 content: SingleChildScrollView(
-                  child: ListBody(
-                    children: [
-                      Text('Estás a punto de cerrar sesión ¿estás seguro?'),
-                    ],
-                  ),
+                  child: ListBody(children: [Text('Estás a punto de cerrar sesión ¿estás seguro?')]),
                 ),
                 actions: [
                   TextButton(
@@ -65,10 +61,7 @@ class _TipoScreenState extends State<TipoScreen> {
               height: 43,
               child: Align(
                 alignment: AlignmentDirectional(0, 0),
-                child: Text(
-                  'Selecciona el tipo de plato',
-                  style: TextStyle(fontSize: 20, letterSpacing: 0.0),
-                ),
+                child: Text('Selecciona el tipo de plato', style: TextStyle(fontSize: 20, letterSpacing: 0.0)),
               ),
             ),
             Expanded(
@@ -90,11 +83,7 @@ class _TipoScreenState extends State<TipoScreen> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: ListTile(
-        title: Text(
-          nombre,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 18),
-        ),
+        title: Text(nombre, textAlign: TextAlign.center, style: const TextStyle(fontSize: 18)),
         onTap: () {
           switch (nombre) {
             case 'Entrante':

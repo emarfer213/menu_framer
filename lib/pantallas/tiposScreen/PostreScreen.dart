@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/plato.dart';
 import '../../provider/MenuProvider.dart';
 
-class PostreScreen extends StatefulWidget{
+class PostreScreen extends StatefulWidget {
   const PostreScreen({super.key});
 
   @override
@@ -23,11 +23,7 @@ class _postreScreentState extends State<PostreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Postre"),
-        centerTitle: true,
-        backgroundColor: Colors.amber,
-      ),
+      appBar: AppBar(title: const Text("Postre"), centerTitle: true, backgroundColor: Colors.amber),
       body: FutureBuilder<List<Plato>>(
         future: _meals,
         builder: (context, snapshot) {
@@ -51,8 +47,7 @@ class _postreScreentState extends State<PostreScreen> {
                 title: Text(meal.name),
                 subtitle: Text(meal.category),
                 onTap: () {
-                  Navigator.pushNamed(
-                      context, '/detailsScreen', arguments: meal);
+                  Navigator.pushNamed(context, '/detailsScreen', arguments: meal);
                 },
               );
             },

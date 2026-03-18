@@ -35,21 +35,19 @@ class MyApp extends StatelessWidget {
         '/segundoPlatoScreen': (context) => SegundoPlatoScreen(),
         '/postreScreen': (context) => PostreScreen(),
         '/detailsScreen': (context) => DetailsScreen(),
-        '/pasosScreen': (context) => PasosScreen()
+        '/pasosScreen': (context) => PasosScreen(),
       },
       home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot){
-            if(snapshot.connectionState == ConnectionState.waiting){
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
-            }
-            if(snapshot.hasData){
-              return const TipoScreen();
-            }
-            return const LoginScreen();
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(body: Center(child: CircularProgressIndicator()));
           }
+          if (snapshot.hasData) {
+            return const TipoScreen();
+          }
+          return const LoginScreen();
+        },
       ),
     );
   }

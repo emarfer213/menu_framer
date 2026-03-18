@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_framer/models/plato.dart';
 import 'package:menu_framer/provider/MenuProvider.dart';
 
-class PrimerPlatoScreen extends StatefulWidget{
+class PrimerPlatoScreen extends StatefulWidget {
   const PrimerPlatoScreen({super.key});
 
   @override
@@ -22,11 +22,7 @@ class _primerScreentState extends State<PrimerPlatoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Primer plato"),
-        centerTitle: true,
-        backgroundColor: Colors.amber,
-      ),
+      appBar: AppBar(title: const Text("Primer plato"), centerTitle: true, backgroundColor: Colors.amber),
       body: FutureBuilder<List<Plato>>(
         future: _meals,
         builder: (context, snapshot) {
@@ -50,8 +46,7 @@ class _primerScreentState extends State<PrimerPlatoScreen> {
                 title: Text(meal.name),
                 subtitle: Text(meal.category),
                 onTap: () {
-                  Navigator.pushNamed(
-                      context, '/detailsScreen', arguments: meal);
+                  Navigator.pushNamed(context, '/detailsScreen', arguments: meal);
                 },
               );
             },

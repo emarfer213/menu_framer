@@ -18,24 +18,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Menu framer'),
-        backgroundColor: Colors.amber,
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text('Menu framer'), backgroundColor: Colors.amber, centerTitle: true),
       body: SafeArea(
         child: Container(
           color: Colors.grey[300],
           child: Column(
             spacing: 50,
             children: [
-              Center(
-                child: SizedBox(
-                  width: 300,
-                  height: 300,
-                  child: Image.asset("cocina.jpg"),
-                ),
-              ),
+              Center(child: SizedBox(width: 300, height: 300, child: Image.asset("cocina.jpg"))),
               Form(
                 key: _formKey,
                 child: Column(
@@ -45,10 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Correo",
-                            border: OutlineInputBorder(),
-                          ),
+                          decoration: InputDecoration(hintText: "Correo", border: OutlineInputBorder()),
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'El correo es obligatorio';
@@ -73,10 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
                           obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: "Contraseña",
-                            border: OutlineInputBorder(),
-                          ),
+                          decoration: InputDecoration(hintText: "Contraseña", border: OutlineInputBorder()),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "La contraseña es obligatorio";
@@ -103,10 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     try {
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: correo,
-                        password: contrasenia,
-                      );
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo, password: contrasenia);
                     } on FirebaseAuthException catch (e) {
                       setState(() {
                         errorMesage = "Valores introducidos incorrectos";
@@ -124,12 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 onHover: (val) {
                   setState(() {
-                    print(
-                      Text(
-                        "¿No tienes una cuenta? Regístrate",
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    );
+                    print(Text("¿No tienes una cuenta? Regístrate", style: TextStyle(color: Colors.blue)));
                     isHover = val;
                   });
                 },

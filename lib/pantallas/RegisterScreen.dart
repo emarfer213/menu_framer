@@ -17,30 +17,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Menu framer'),
-        backgroundColor: Colors.amber,
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text('Menu framer'), backgroundColor: Colors.amber, centerTitle: true),
       body: SafeArea(
         child: Container(
           color: Colors.grey[300],
           child: Column(
             spacing: 25,
             children: [
-              Center(
-                child: SizedBox(
-                  width: 300,
-                  height: 300,
-                  child: Image.asset("cocina2.jpg"),
-                ),
-              ),
+              Center(child: SizedBox(width: 300, height: 300, child: Image.asset("cocina2.jpg"))),
               Container(
                 padding: EdgeInsets.only(top: 20),
-                child: Text(
-                  'Introduzca sus datos',
-                  textAlign: TextAlign.center,
-                ),
+                child: Text('Introduzca sus datos', textAlign: TextAlign.center),
               ),
               Form(
                 key: _formKey,
@@ -51,10 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Correo",
-                            border: OutlineInputBorder(),
-                          ),
+                          decoration: InputDecoration(hintText: "Correo", border: OutlineInputBorder()),
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'El correo es obligatorio';
@@ -83,10 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 50),
                         child: TextFormField(
                           obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: "Contraseña",
-                            border: OutlineInputBorder(),
-                          ),
+                          decoration: InputDecoration(hintText: "Contraseña", border: OutlineInputBorder()),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "La contraseña es obligatorio";
@@ -113,10 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     try {
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: correo,
-                        password: contrasenia,
-                      );
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo, password: contrasenia);
                     } on FirebaseAuthException catch (e) {
                       setState(() {
                         errorMesage = "Valores introducidos incorrectos";

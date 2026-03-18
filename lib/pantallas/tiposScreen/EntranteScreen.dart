@@ -23,11 +23,7 @@ class _entranteScreentState extends State<EntranteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Entrante"),
-        centerTitle: true,
-        backgroundColor: Colors.amber,
-      ),
+      appBar: AppBar(title: const Text("Entrante"), centerTitle: true, backgroundColor: Colors.amber),
       body: FutureBuilder<List<Plato>>(
         future: _meals,
         builder: (context, snapshot) {
@@ -51,11 +47,7 @@ class _entranteScreentState extends State<EntranteScreen> {
                 title: Text(meal.name),
                 subtitle: Text(meal.category),
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/detailsScreen',
-                    arguments: meal,
-                  );
+                  Navigator.pushNamed(context, '/detailsScreen', arguments: meal);
                 },
               );
             },
