@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menu_framer/models/VideoDialog.dart';
 import '../models/plato.dart';
 import '../provider/MenuProvider.dart';
 
@@ -34,8 +35,9 @@ class _detailsScreentState extends State<DetailsScreen> {
 
             return SingleChildScrollView(
               child: Column(
+                spacing: 40,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Center(
                     child: Container(
@@ -44,17 +46,30 @@ class _detailsScreentState extends State<DetailsScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 20),
-
-                  Center(child: Text('Los ingredientes necesarios para la preparacion seran:')),
-
-                  SizedBox(height: 20),
-
-                  ...plato.ingredientes.map(
-                    (ingrediente) => Center(child: Text("• ${ingrediente.nombre}: ${ingrediente.medida}")),
+                  Center(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => VideoDialog(
+                            videoUrl: plato.link,
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.play_arrow, color: Colors.white,),
+                      label: Text("Ver preparación", style: TextStyle(color: Colors.white),),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+                    ),
                   ),
 
-                  SizedBox(height: 20),
+                  Column(
+                    children: [
+                      Center(child: Text('Los ingredientes necesarios para la preparacion seran:')),
+                      ...plato.ingredientes.map(
+                        (ingrediente) => Center(child: Text("• ${ingrediente.nombre}: ${ingrediente.medida}")),
+                      ),
+                    ],
+                  ),
 
                   Container(
                     padding: EdgeInsetsGeometry.only(bottom: 20),

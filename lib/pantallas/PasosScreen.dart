@@ -96,10 +96,16 @@ class _pasosScreentState extends State<PasosScreen> {
                                 child: Center(
                                   child: Text(
                                     i,
-                                    style: const TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.pink,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      shadows: [
+                                        Shadow(
+                                          blurRadius: 6,
+                                          color: Colors.white,
+                                          offset: Offset(2, 2),
+                                        ),
+                                      ],
                                     ),
                                     textAlign: TextAlign.center,
                                   ),

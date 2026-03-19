@@ -5,6 +5,7 @@ class Plato {
   final List<String> instructions;
   final String thumbnail;
   final List<Ingrediente> ingredientes;
+  final String link;
 
   Plato({
     required this.id,
@@ -13,6 +14,7 @@ class Plato {
     required this.instructions,
     required this.thumbnail,
     required this.ingredientes,
+    required this.link
   });
 
   factory Plato.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class Plato {
       instructions: (json['strInstructions'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
       thumbnail: json['strMealThumb'] ?? '',
       ingredientes: listaIngredientes,
+      link: json['strLink'] ?? '',
     );
   }
 }

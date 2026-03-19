@@ -37,7 +37,8 @@ class _postreScreentState extends State<PostreScreen> {
 
           final meals = snapshot.data ?? [];
 
-          return ListView.builder(
+          return ListView.separated(
+            separatorBuilder: (BuildContext context, int index) => Divider(height: 1),
             itemCount: meals.length,
             itemBuilder: (context, index) {
               final meal = meals[index];
