@@ -6,11 +6,13 @@ import '../provider/MenuProvider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class PasosScreen extends StatefulWidget {
+  const PasosScreen({super.key});
+
   @override
-  State<PasosScreen> createState() => _pasosScreentState();
+  State<PasosScreen> createState() => _PasosScreentState();
 }
 
-class _pasosScreentState extends State<PasosScreen> {
+class _PasosScreentState extends State<PasosScreen> {
   late Future<Plato?> platoFuture;
   int _currentSlide = 0;
   int _elapsedSeconds = 0;
