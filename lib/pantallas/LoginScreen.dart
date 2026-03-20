@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onChanged: (value) => {
                             setState(() {
                               correo = value;
-                              errorMesage = null; // limpia error al escribir
+                              errorMesage = null;
                             }),
                           },
                         ),
@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onChanged: (value) => {
                             setState(() {
                               contrasenia = value;
-                              errorMesage = null; // limpia error al escribir
+                              errorMesage = null;
                             }),
                           },
                         ),
