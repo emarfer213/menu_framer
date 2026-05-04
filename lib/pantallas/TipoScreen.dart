@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+//import 'dart:html' as html;
+//import 'dart:js' as js;
 
 class TipoScreen extends StatefulWidget {
   const TipoScreen({super.key});
@@ -11,6 +14,25 @@ class TipoScreen extends StatefulWidget {
 class _TipoScreenState extends State<TipoScreen> {
   final _formKey = GlobalKey<FormState>();
   List opciones = ["Entrante", "Primer plato", "Segundo plato", "Postre"];
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _textoReconocido = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    /*html.window.addEventListener('speech-result', (event) {
+      final customEvent = event as html.CustomEvent;
+      final texto = customEvent.detail.toString().toLowerCase();
+
+      setState(() {
+        _textoReconocido = texto;
+      });
+
+      _procesarComando(texto);
+    });*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +46,7 @@ class _TipoScreenState extends State<TipoScreen> {
               builder: (context) => AlertDialog(
                 title: Text('Cerrar sesión'),
                 content: SingleChildScrollView(
-                  child: ListBody(
-                    children: [
-                      Text('Estás a punto de cerrar sesión ¿estás seguro?'),
-                    ],
-                  ),
+                  child: ListBody(children: [Text('Estás a punto de cerrar sesión ¿estás seguro?')]),
                 ),
                 actions: [
                   TextButton(
@@ -54,6 +72,10 @@ class _TipoScreenState extends State<TipoScreen> {
         backgroundColor: Colors.amber,
         centerTitle: true,
       ),
+      /*floatingActionButton: FloatingActionButton(
+        onPressed: _escuchar,
+        child: Icon(_isListening ? Icons.mic : Icons.mic_none),
+      ),*/
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -65,10 +87,7 @@ class _TipoScreenState extends State<TipoScreen> {
               height: 43,
               child: Align(
                 alignment: AlignmentDirectional(0, 0),
-                child: Text(
-                  'Selecciona el tipo de plato',
-                  style: TextStyle(fontSize: 20, letterSpacing: 0.0),
-                ),
+                child: Text('Selecciona el tipo de plato', style: TextStyle(fontSize: 20, letterSpacing: 0.0)),
               ),
             ),
             Expanded(
@@ -76,7 +95,7 @@ class _TipoScreenState extends State<TipoScreen> {
                 padding: EdgeInsets.only(top: 20),
                 itemCount: opciones.length,
                 itemBuilder: (context, index) {
-                  return opcion(opciones[index]);
+                  return comandos(opciones[index]);
                 },
               ),
             ),
@@ -86,32 +105,44 @@ class _TipoScreenState extends State<TipoScreen> {
     );
   }
 
-  Widget opcion(String nombre) {
+  Widget comandos(String nombre) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: ListTile(
-        title: Text(
-          nombre,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 18),
-        ),
+        title: Text(nombre, textAlign: TextAlign.center, style: const TextStyle(fontSize: 18)),
         onTap: () {
           switch (nombre) {
             case 'Entrante':
-              Navigator.pushNamed(context, '/entranteScreen');
+              Navigator.pushNamed(context, '/platoScreen', arguments: 'Starter');
               break;
             case 'Primer plato':
-              Navigator.pushNamed(context, '/primerPlatoScreen');
+              Navigator.pushNamed(context, '/platoScreen', arguments: 'Pork');
               break;
             case 'Segundo plato':
-              Navigator.pushNamed(context, '/segundoPlatoScreen');
+              Navigator.pushNamed(context, '/platoScreen', arguments: 'Miscellaneous');
               break;
             case 'Postre':
-              Navigator.pushNamed(context, '/postreScreen');
+              Navigator.pushNamed(context, '/platoScreen', arguments: 'Dessert');
               break;
           }
         },
       ),
     );
+  }
+
+  /*void _escuchar() {
+    js.context.callMethod('iniciarReconocimiento');
+  }*/
+
+  void _procesarComando(String texto) {
+    if (texto.contains("entrante")) {
+      Navigator.pushNamed(context, '/platoScreen', arguments: 'Starter');
+    } else if (texto.contains("primer")) {
+      Navigator.pushNamed(context, '/platoScreen', arguments: 'Pork');
+    } else if (texto.contains("segundo")) {
+      Navigator.pushNamed(context, '/platoScreen', arguments: 'Miscellaneous');
+    } else if (texto.contains("postre")) {
+      Navigator.pushNamed(context, '/platoScreen', arguments: 'Dessert');
+    }
   }
 }

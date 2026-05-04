@@ -32,6 +32,28 @@
   <title>menu_framer</title>
   <link rel="manifest" href="manifest.json">
 </head>
+<script>
+  var recognition;
+
+  function iniciarReconocimiento() {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert("El navegador no soporta reconocimiento de voz");
+      return;
+    }
+
+    recognition = new webkitSpeechRecognition();
+    recognition.lang = "es-ES";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = function(event) {
+      const texto = event.results[0][0].transcript;
+      window.dispatchEvent(new CustomEvent('speech-result', { detail: texto }));
+    };
+
+    recognition.start();
+  }
+</script>
 <body>
   <script src="flutter_bootstrap.js" async></script>
 </body>
