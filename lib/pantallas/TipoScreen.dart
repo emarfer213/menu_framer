@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-//import 'dart:html' as html;
-//import 'dart:js' as js;
+import '../provider/voiceControler.dart';
 
 class TipoScreen extends StatefulWidget {
   const TipoScreen({super.key});
@@ -14,24 +12,29 @@ class TipoScreen extends StatefulWidget {
 class _TipoScreenState extends State<TipoScreen> {
   final _formKey = GlobalKey<FormState>();
   List opciones = ["Entrante", "Primer plato", "Segundo plato", "Postre"];
-  late stt.SpeechToText _speech;
-  bool _isListening = false;
-  String _textoReconocido = "";
 
   @override
   void initState() {
     super.initState();
 
-    /*html.window.addEventListener('speech-result', (event) {
-      final customEvent = event as html.CustomEvent;
-      final texto = customEvent.detail.toString().toLowerCase();
+    voiceController.init();
 
-      setState(() {
-        _textoReconocido = texto;
-      });
+    voiceController.onCommand = (texto) {
+      if (texto.contains("entrante")) {
+        Navigator.pushNamed(context, '/platoScreen', arguments: 'Starter');
+      } else if (texto.contains("primer")) {
+        Navigator.pushNamed(context, '/platoScreen', arguments: 'Pork');
+      } else if (texto.contains("segundo")) {
+        Navigator.pushNamed(context, '/platoScreen', arguments: 'Miscellaneous');
+      } else if (texto.contains("postre")) {
+        Navigator.pushNamed(context, '/platoScreen', arguments: 'Dessert');
+      }
+    };
+  }
 
-      _procesarComando(texto);
-    });*/
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -72,10 +75,6 @@ class _TipoScreenState extends State<TipoScreen> {
         backgroundColor: Colors.amber,
         centerTitle: true,
       ),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: _escuchar,
-        child: Icon(_isListening ? Icons.mic : Icons.mic_none),
-      ),*/
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -128,21 +127,5 @@ class _TipoScreenState extends State<TipoScreen> {
         },
       ),
     );
-  }
-
-  /*void _escuchar() {
-    js.context.callMethod('iniciarReconocimiento');
-  }*/
-
-  void _procesarComando(String texto) {
-    if (texto.contains("entrante")) {
-      Navigator.pushNamed(context, '/platoScreen', arguments: 'Starter');
-    } else if (texto.contains("primer")) {
-      Navigator.pushNamed(context, '/platoScreen', arguments: 'Pork');
-    } else if (texto.contains("segundo")) {
-      Navigator.pushNamed(context, '/platoScreen', arguments: 'Miscellaneous');
-    } else if (texto.contains("postre")) {
-      Navigator.pushNamed(context, '/platoScreen', arguments: 'Dessert');
-    }
   }
 }
