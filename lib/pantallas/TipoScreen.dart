@@ -12,11 +12,15 @@ class TipoScreen extends StatefulWidget {
 class _TipoScreenState extends State<TipoScreen> {
   final _formKey = GlobalKey<FormState>();
   List opciones = ["Entrante", "Primer plato", "Segundo plato", "Postre"];
+  bool _esperandoConfirmacionLogout = false;
+
+  bool _esCerrarSesion(String texto) {
+    return (texto.contains("cerrar") && texto.contains("sesion")) || texto.contains("salir");
+  }
 
   @override
   void initState() {
     super.initState();
-
     voiceController.init();
 
     voiceController.onCommand = (texto) {
@@ -28,6 +32,8 @@ class _TipoScreenState extends State<TipoScreen> {
         Navigator.pushNamed(context, '/platoScreen', arguments: 'Miscellaneous');
       } else if (texto.contains("postre")) {
         Navigator.pushNamed(context, '/platoScreen', arguments: 'Dessert');
+      } else if (_esCerrarSesion(texto)) {
+        _cerrarSesion();
       }
     };
   }
@@ -44,30 +50,7 @@ class _TipoScreenState extends State<TipoScreen> {
         leading: IconButton(
           tooltip: "Cerrar sesión",
           onPressed: () async {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text('Cerrar sesión'),
-                content: SingleChildScrollView(
-                  child: ListBody(children: [Text('Estás a punto de cerrar sesión ¿estás seguro?')]),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () async {
-                      await FirebaseAuth.instance.signOut();
-                      Navigator.of(context).pop(); // cerrar diálogo
-                    },
-                    child: Text('Aceptar'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Cancelar'),
-                  ),
-                ],
-              ),
-            );
+            _cerrarSesion();
           },
           icon: Icon(Icons.person_off, color: Colors.black),
         ),
@@ -125,6 +108,31 @@ class _TipoScreenState extends State<TipoScreen> {
               break;
           }
         },
+      ),
+    );
+  }
+
+  void _cerrarSesion() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Cerrar sesión'),
+        content: const Text('¿Estás seguro?'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Aceptar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancelar'),
+          ),
+        ],
       ),
     );
   }

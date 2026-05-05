@@ -4,32 +4,35 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 class VoiceController {
   final stt.SpeechToText _speech = stt.SpeechToText();
 
-  bool _isInitialized = false;
-  bool _isListening = false;
-  bool _modoComando = false;
+  bool _initialized = false;
+  bool _listening = false;
 
   Function(String texto)? onCommand;
 
+  // 🚀 INIT
   Future<void> init() async {
-    if (_isInitialized) return;
+    if (_initialized) return;
 
-    _isInitialized = await _speech.initialize(
+    _initialized = await _speech.initialize(
       onStatus: _onStatus,
       onError: (error) {
-        print("Error: $error");
+        print("❌ Error: $error");
         _restartListening();
       },
     );
 
-    if (_isInitialized) {
+    print("🎤 Inicializado: $_initialized");
+
+    if (_initialized) {
       _startListening();
     }
   }
 
+  // 🎤 escucha continua simulada
   void _startListening() async {
-    if (_isListening) return;
+    if (_listening) return;
 
-    _isListening = true;
+    _listening = true;
 
     await _speech.listen(
       onResult: _onResult,
@@ -38,19 +41,19 @@ class VoiceController {
       localeId: "es_ES",
     );
 
-    print("Escuchando...");
+    print("👂 Escuchando...");
   }
 
   void _onStatus(String status) {
+    print("📊 Status: $status");
+
     if (status == "done" || status == "notListening") {
       _restartListening();
     }
   }
 
   void _restartListening() async {
-    if (!_isInitialized) return;
-
-    _isListening = false;
+    _listening = false;
 
     await _speech.stop();
     await Future.delayed(const Duration(milliseconds: 500));
@@ -58,29 +61,26 @@ class VoiceController {
     _startListening();
   }
 
+  // 🧠 AQUÍ ESTÁ LA CLAVE
   void _onResult(stt.SpeechRecognitionResult result) {
     final texto = result.recognizedWords.toLowerCase();
 
     if (texto.isEmpty) return;
 
-    print(texto);
+    print("📝 $texto");
 
-    if (!_modoComando) {
-      if (texto.contains("asistente")) {
-        print("Wake word detectada");
-        _modoComando = true;
+    // 🔥 Detectar wake word + comando juntos
+    if (texto.contains("asistente")) {
+      final comando = texto.replaceAll("asistente", "").trim();
+
+      // solo ejecutar cuando la frase esté finalizada
+      if (result.finalResult && comando.isNotEmpty) {
+        print("🧠 Ejecutando: $comando");
+
+        if (onCommand != null) {
+          onCommand!(comando);
+        }
       }
-      return;
-    }
-
-    if (result.finalResult) {
-      print("Ejecutando comando");
-
-      if (onCommand != null) {
-        onCommand!(texto);
-      }
-
-      _modoComando = false;
     }
   }
 
