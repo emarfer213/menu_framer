@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_framer/models/VideoDialog.dart';
 import '../models/plato.dart';
 import '../provider/MenuProvider.dart';
+import '../provider/voiceControler.dart';
 
 class DetailsScreen extends StatefulWidget {
   @override
@@ -10,13 +11,21 @@ class DetailsScreen extends StatefulWidget {
 
 class _detailsScreentState extends State<DetailsScreen> {
   late Future<Plato?> platoFuture;
+  late Plato plato;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final Plato plato = ModalRoute.of(context)?.settings.arguments as Plato;
-
+    plato = ModalRoute.of(context)?.settings.arguments as Plato;
     platoFuture = MenuProvider().getMealDetail(plato.id);
+
+    voiceController.onCommand = (texto) {
+      if (!mounted) return;
+
+      if (texto.contains("intentar")) {
+        Navigator.pushNamed(context, '/pasosScreen', arguments: plato);
+      }
+    };
   }
 
   @override

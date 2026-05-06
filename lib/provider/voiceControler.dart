@@ -9,7 +9,6 @@ class VoiceController {
 
   Function(String texto)? onCommand;
 
-  // 🚀 INIT
   Future<void> init() async {
     if (_initialized) return;
 
@@ -28,7 +27,6 @@ class VoiceController {
     }
   }
 
-  // 🎤 escucha continua simulada
   void _startListening() async {
     if (_listening) return;
 
@@ -39,6 +37,8 @@ class VoiceController {
       listenMode: stt.ListenMode.dictation,
       partialResults: true,
       localeId: "es_ES",
+      listenFor: const Duration(seconds: 30), // ⏱ máximo permitido
+      pauseFor: const Duration(seconds: 5),   // ⏸ silencio antes de cortar
     );
 
     print("👂 Escuchando...");
@@ -53,15 +53,18 @@ class VoiceController {
   }
 
   void _restartListening() async {
+    if (!_initialized) return;
+
     _listening = false;
 
     await _speech.stop();
-    await Future.delayed(const Duration(milliseconds: 500));
+
+    // 🔥 reinicio rápido (clave)
+    await Future.delayed(const Duration(milliseconds: 300));
 
     _startListening();
   }
 
-  // 🧠 AQUÍ ESTÁ LA CLAVE
   void _onResult(stt.SpeechRecognitionResult result) {
     final texto = result.recognizedWords.toLowerCase();
 
@@ -69,17 +72,13 @@ class VoiceController {
 
     print("📝 $texto");
 
-    // 🔥 Detectar wake word + comando juntos
     if (texto.contains("asistente")) {
       final comando = texto.replaceAll("asistente", "").trim();
 
-      // solo ejecutar cuando la frase esté finalizada
       if (result.finalResult && comando.isNotEmpty) {
         print("🧠 Ejecutando: $comando");
 
-        if (onCommand != null) {
-          onCommand!(comando);
-        }
+        onCommand?.call(comando);
       }
     }
   }
