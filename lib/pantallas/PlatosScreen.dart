@@ -150,7 +150,7 @@ class _PlatoScreenState extends State<PlatoScreen> {
 
   // Realiza la navegación hacia la pantalla de detalles del plato.
   void _abrirPlato(Plato plato) {
-    print("🍽️ Abriendo: ${plato.name}");
+    print("Abriendo: ${plato.name}");
     Navigator.pushNamed(context, '/detailsScreen', arguments: plato);
   }
 }
