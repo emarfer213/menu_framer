@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // Pantalla que permite a los nuevos usuarios registrarse en la aplicación.
@@ -11,6 +12,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  String nombre = ""; // variable del nombre de usuario.
   String correo = ""; // variable del correo electrónico.
   String contrasenia = ""; //Contraseña introducida por el usuario.
   String? errorMesage = ""; // Variable que almacena mensajes de error devueltos por la lógica de validación o Firebase.
@@ -36,7 +38,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   spacing: 10,
                   children: [
-                    // Campo de entrada para el correo electrónico.
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: TextFormField(
+                          decoration: const InputDecoration(hintText: "Nombre", border: OutlineInputBorder()),
+                          validator: (String? value) {
+                            // mensaje de error pesonalizados dependiendo del fallo cometido por el usario
+                            if (value == null || value.isEmpty) {
+                              return 'El nombre de usuario es obligatorio';
+                            }
+                            if (errorMesage != null && errorMesage!.isNotEmpty) {
+                              return errorMesage;
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              nombre = value;
+                              errorMesage = null; // Limpia error al escribir.
+                            });
+                          },
+                        ),
+                      ),
+                    ),
                     Center(
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -99,7 +124,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   if (_formKey.currentState!.validate()) {
                     try {
                       // Usamos createUserWithEmailAndPassword para registrar nuevos usuarios.
-                      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: correo, password: contrasenia);
+                      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: correo,
+                        password: contrasenia,
+                      );
+
+                      if (userCredential.user != null) {
+                        await FirebaseFirestore.instance
+                            .collection('usuarios')
+                            .doc(userCredential.user!.uid)
+                            .set({
+                          'uid': userCredential.user!.uid,
+                          'nombre': nombre,
+                          'correo': correo,
+                          'platosPreparados': 0,
+                        });
+                      }
+
+                      if (mounted) Navigator.pop(context);
+
                       // Una vez registrado, Firebase suele loguear al usuario automáticamente.
                     } on FirebaseAuthException catch (e) {
                       setState(() {

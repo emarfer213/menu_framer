@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/plato.dart';
 import '../provider/MenuProvider.dart';
@@ -15,10 +17,10 @@ class PasosScreen extends StatefulWidget {
 }
 
 class _PasosScreentState extends State<PasosScreen> {
-  late Future<Plato?> platoFuture;// Futuro que su utilizara para obtener las instrucciones del plato.
-  int _currentSlide = 0;// Índice de la diapositiva en la cual inicia el carrusel.
-  int _elapsedSeconds = 0;// Segundos transcurridos desde que se entró en el paso actual.
-  Timer? _timer;// Referencia al temporizador periódico que actualiza el contador cada segundo.
+  late Future<Plato?> platoFuture; // Futuro que su utilizara para obtener las instrucciones del plato.
+  int _currentSlide = 0; // Índice de la diapositiva en la cual inicia el carrusel.
+  int _elapsedSeconds = 0; // Segundos transcurridos desde que se entró en el paso actual.
+  Timer? _timer; // Referencia al temporizador periódico que actualiza el contador cada segundo.
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _PasosScreentState extends State<PasosScreen> {
   }
 
   // Manejador de comandos de voz específicos para la fase de preparación.
-  void _handleVoiceCommand(String texto) {
+  Future<void> _handleVoiceCommand(String texto) async {
     if (!mounted) return;
 
     texto = texto.toLowerCase().trim();
@@ -54,7 +56,7 @@ class _PasosScreentState extends State<PasosScreen> {
 
     // Comando "terminar": Finaliza el proceso y vuelve a la pantalla inicial de tipos.
     if (texto.contains("terminar")) {
-      Navigator.pushNamedAndRemoveUntil(context, '/tipoScreen', (route) => false);
+      await finalizarPLato(context);
       return;
     }
 
@@ -86,11 +88,7 @@ class _PasosScreentState extends State<PasosScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Menu Framer'),
-        backgroundColor: Colors.amber,
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Menu Framer'), backgroundColor: Colors.amber, centerTitle: true),
 
       body: SafeArea(
         child: FutureBuilder<Plato?>(
@@ -104,7 +102,7 @@ class _PasosScreentState extends State<PasosScreen> {
             /**
              * Una vez cargados los datos, iniciamos el temporizador para el primer paso. Y
              * usamos addPostFrameCallback para evitar llamar a setState durante la construcción.
-              */
+             */
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (_timer == null) {
                 _startTimer();
@@ -122,8 +120,10 @@ class _PasosScreentState extends State<PasosScreen> {
                   child: CarouselSlider(
                     options: CarouselOptions(
                       height: double.infinity,
-                      autoPlay: true, // El carrusel avanza solo
-                      autoPlayInterval: const Duration(seconds: 60), // Un minuto por paso por defecto
+                      autoPlay: true,
+                      // El carrusel avanza solo
+                      autoPlayInterval: const Duration(seconds: 60),
+                      // Un minuto por paso por defecto
                       autoPlayAnimationDuration: const Duration(seconds: 2),
                       onPageChanged: (index, reason) {
                         setState(() {
@@ -212,9 +212,8 @@ class _PasosScreentState extends State<PasosScreen> {
                   padding: const EdgeInsets.all(50),
                   child: Center(
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Navega a la pantalla principal de selección y limpia el stack de navegación.
-                        Navigator.pushNamedAndRemoveUntil(context, '/tipoScreen', (route) => false);
+                      onPressed: () async {
+                        await finalizarPLato(context);
                       },
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
                       label: const Text("Terminar", style: TextStyle(color: Colors.white, fontSize: 20)),
@@ -227,5 +226,29 @@ class _PasosScreentState extends State<PasosScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> finalizarPLato(BuildContext context) async {
+    try {
+      // 1. Obtenemos el usuario actual
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // 2. Actualizamos el contador en Firestore
+        await FirebaseFirestore.instance.collection('usuarios').doc(user.uid).update({
+          'platosPreparados': FieldValue.increment(1),
+        });
+        print("Contador incrementado");
+      }
+    } catch (e) {
+      print("Error al actualizar platosPreparados: $e");
+      // Nota: Si el documento no existe, update fallará.
+      // Podrías usar .set(..., SetOptions(merge: true)) si no estás seguro.
+    }
+
+    // 3. Navegamos a la pantalla principal
+    if (context.mounted) {
+      Navigator.pushNamedAndRemoveUntil(context, '/tipoScreen', (route) => false);
+    }
   }
 }
