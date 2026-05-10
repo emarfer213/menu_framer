@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
 import '../models/plato.dart';
 import '../provider/MenuProvider.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import '../provider/voiceControler.dart';
 
 class PasosScreen extends StatefulWidget {
   const PasosScreen({super.key});
@@ -13,22 +15,68 @@ class PasosScreen extends StatefulWidget {
 }
 
 class _PasosScreentState extends State<PasosScreen> {
-  late Future<Plato?> platoFuture;
-  int _currentSlide = 0;
-  int _elapsedSeconds = 0;
-  Timer? _timer;
+  late Future<Plato?> platoFuture;// Futuro que su utilizara para obtener las instrucciones del plato.
+  int _currentSlide = 0;// Índice de la diapositiva en la cual inicia el carrusel.
+  int _elapsedSeconds = 0;// Segundos transcurridos desde que se entró en el paso actual.
+  Timer? _timer;// Referencia al temporizador periódico que actualiza el contador cada segundo.
+
+  @override
+  void initState() {
+    super.initState();
+    voiceController.addListener(_handleVoiceCommand);
+  }
+
+  @override
+  void dispose() {
+    voiceController.removeListener(_handleVoiceCommand);
+    _timer?.cancel(); //Detenemos el temporizador.
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    // Obtenemos el objeto Plato pasado como argumento desde la pantalla de detalles.
     final Plato plato = ModalRoute.of(context)?.settings.arguments as Plato;
+
+    // Iniciamos la petición para obtener el detalle completo del plato para posteriormente obtener las instrucciones.
     platoFuture = MenuProvider().getMealDetail(plato.id);
   }
 
+  // Manejador de comandos de voz específicos para la fase de preparación.
+  void _handleVoiceCommand(String texto) {
+    if (!mounted) return;
+
+    texto = texto.toLowerCase().trim();
+
+    print("PasosScreen recibió comando de voz: $texto");
+
+    // Comando "terminar": Finaliza el proceso y vuelve a la pantalla inicial de tipos.
+    if (texto.contains("terminar")) {
+      Navigator.pushNamedAndRemoveUntil(context, '/tipoScreen', (route) => false);
+      return;
+    }
+
+    //Comandos de retroceso: Permiten volver a la pantalla de detalles del plato.
+    if (texto.contains("volver") || texto.contains("atrás") || texto.contains("atras")) {
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+      return;
+    }
+  }
+
+  /**
+   * Inicia o reinicia el temporizador de tiempo por paso.
+   * Se ejecuta cada vez que el usuario cambia de diapositiva en el carrusel.
+   */
   void _startTimer() {
     _timer?.cancel();
     _elapsedSeconds = 0;
+
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
       setState(() {
         _elapsedSeconds++;
       });
@@ -36,23 +84,27 @@ class _PasosScreentState extends State<PasosScreen> {
   }
 
   @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Menu Framer'), backgroundColor: Colors.amber, centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Menu Framer'),
+        backgroundColor: Colors.amber,
+        centerTitle: true,
+      ),
+
       body: SafeArea(
-        child: FutureBuilder(
+        child: FutureBuilder<Plato?>(
           future: platoFuture,
           builder: (context, snapshot) {
+            // Mientras no haya datos, mostramos una animacion de carga.
             if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
+            /**
+             * Una vez cargados los datos, iniciamos el temporizador para el primer paso. Y
+             * usamos addPostFrameCallback para evitar llamar a setState durante la construcción.
+              */
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (_timer == null) {
                 _startTimer();
@@ -64,28 +116,34 @@ class _PasosScreentState extends State<PasosScreen> {
             return Column(
               children: [
                 const SizedBox(height: 20),
+
+                // CARRUSEL PRINCIPAL
                 Expanded(
                   child: CarouselSlider(
                     options: CarouselOptions(
                       height: double.infinity,
-                      autoPlay: true,
-                      autoPlayInterval: const Duration(seconds: 10),
+                      autoPlay: true, // El carrusel avanza solo
+                      autoPlayInterval: const Duration(seconds: 60), // Un minuto por paso por defecto
                       autoPlayAnimationDuration: const Duration(seconds: 2),
                       onPageChanged: (index, reason) {
                         setState(() {
                           _currentSlide = index;
                         });
+                        // Reiniciamos el tiempo al cambiar de paso
                         _startTimer();
                       },
                     ),
+
+                    // Mapeamos la lista de instrucciones a una lista de diapositivas
                     items: plato.instructions.asMap().entries.map((entry) {
                       int index = entry.key;
-                      String i = entry.value;
+                      String instruccion = entry.value;
 
                       return Builder(
                         builder: (BuildContext context) {
                           return Stack(
                             children: [
+                              //Imagen de fondo y texto de la instrucción
                               Container(
                                 padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 100),
                                 height: double.infinity,
@@ -93,27 +151,27 @@ class _PasosScreentState extends State<PasosScreen> {
                                 margin: const EdgeInsets.symmetric(horizontal: 5.0),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.amber, width: 9),
-                                  image: DecorationImage(image: NetworkImage(plato.thumbnail), fit: BoxFit.cover, opacity: 0.7),
+                                  image: DecorationImage(
+                                    image: NetworkImage(plato.thumbnail),
+                                    fit: BoxFit.cover,
+                                    opacity: 0.7, // Opacidad para facilitar la lectura del texto
+                                  ),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    i,
-                                    style: TextStyle(
+                                    instruccion,
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
-                                      shadows: [
-                                        Shadow(
-                                          blurRadius: 6,
-                                          color: Colors.white,
-                                          offset: Offset(2, 2),
-                                        ),
-                                      ],
+                                      fontWeight: FontWeight.w500,
+                                      shadows: [Shadow(blurRadius: 6, color: Colors.white, offset: Offset(2, 2))],
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),
 
+                              //Indicador del numero del paso en el que se encuentra la diapositiva en la esquina inferior derecha
                               Positioned(
                                 bottom: 9,
                                 right: 14,
@@ -127,6 +185,7 @@ class _PasosScreentState extends State<PasosScreen> {
                                 ),
                               ),
 
+                              //Temporizador en la esquina superior derecha.
                               if (_currentSlide == index)
                                 Positioned(
                                   top: 10,
@@ -147,42 +206,18 @@ class _PasosScreentState extends State<PasosScreen> {
                     }).toList(),
                   ),
                 ),
+
+                // Boton que finalizara el intento de preparacion y regresara a la pantalla principal.
                 Container(
-                  padding: EdgeInsetsGeometry.all(50),
+                  padding: const EdgeInsets.all(50),
                   child: Center(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                "Estas apunto de finalizar la preparacion de un plato. ¿Deseas continuar?",
-                              ),
-                              content: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ElevatedButton.icon(
-                                    onPressed: () async {
-                                      Navigator.pushNamed(context, '/tipoScreen');
-                                    },
-                                    label: const Row(children: [Icon(Icons.check), Text("Confirmar")]),
-                                  ),
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    label: const Row(children: [Icon(Icons.cancel_outlined), Text("Cancelar")]),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
+                        // Navega a la pantalla principal de selección y limpia el stack de navegación.
+                        Navigator.pushNamedAndRemoveUntil(context, '/tipoScreen', (route) => false);
                       },
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-                      label: Text("Terminar", style: TextStyle(color: Colors.white, fontSize: 20)),
+                      label: const Text("Terminar", style: TextStyle(color: Colors.white, fontSize: 20)),
                     ),
                   ),
                 ),
