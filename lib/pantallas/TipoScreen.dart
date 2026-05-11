@@ -144,7 +144,7 @@ class _TipoScreenState extends State<TipoScreen> {
   /**
    * Muestra un diálogo de confirmación antes de cerrar la sesión del usuario.
    * Si el usuario acepta, se invoca el funcion signOut de Firebase Auth.
-    */
+   */
   void _cerrarSesion() {
     showDialog(
       context: context,

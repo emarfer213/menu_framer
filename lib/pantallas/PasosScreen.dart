@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 import '../models/plato.dart';
 import '../provider/MenuProvider.dart';
+import '../provider/UserProvider.dart';
 import '../provider/voiceControler.dart';
 
 class PasosScreen extends StatefulWidget {
@@ -56,7 +58,7 @@ class _PasosScreentState extends State<PasosScreen> {
 
     // Comando "terminar": Finaliza el proceso y vuelve a la pantalla inicial de tipos.
     if (texto.contains("terminar")) {
-      await finalizarPLato(context);
+      await finalizarPLato();
       return;
     }
 
@@ -213,7 +215,7 @@ class _PasosScreentState extends State<PasosScreen> {
                   child: Center(
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        await finalizarPLato(context);
+                        await finalizarPLato();
                       },
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
                       label: const Text("Terminar", style: TextStyle(color: Colors.white, fontSize: 20)),
@@ -228,27 +230,28 @@ class _PasosScreentState extends State<PasosScreen> {
     );
   }
 
-  Future<void> finalizarPLato(BuildContext context) async {
+  Future<void> finalizarPLato() async {
     try {
-      // 1. Obtenemos el usuario actual
-      final user = FirebaseAuth.instance.currentUser;
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final String? uid = userProvider.user?.uid ?? FirebaseAuth.instance.currentUser?.uid;
 
-      if (user != null) {
-        // 2. Actualizamos el contador en Firestore
-        await FirebaseFirestore.instance.collection('usuarios').doc(user.uid).update({
+      if (uid != null) {
+        print("Intentando guardar progreso para: $uid");
+
+        await FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
           'platosPreparados': FieldValue.increment(1),
-        });
-        print("Contador incrementado");
+        }, SetOptions(merge: true));
+
+        print("Incremento realizado con éxito");
+      } else {
+        print("No se pudo realizar el incremento: Usuario no identificado");
       }
     } catch (e) {
-      print("Error al actualizar platosPreparados: $e");
-      // Nota: Si el documento no existe, update fallará.
-      // Podrías usar .set(..., SetOptions(merge: true)) si no estás seguro.
+      print("Error crítico en finalizarPLato: $e");
     }
 
-    // 3. Navegamos a la pantalla principal
-    if (context.mounted) {
-      Navigator.pushNamedAndRemoveUntil(context, '/tipoScreen', (route) => false);
+    if (mounted) {
+      Navigator.pushNamedAndRemoveUntil(context, '/principalScreen', (route) => false);
     }
   }
 }
