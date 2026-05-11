@@ -51,7 +51,7 @@ class VoiceController {
    * Ademas lo hemos configurado para el idioma Español de españa.
    */
   void _startListening() async {
-    if (_listening) return;
+    if (_listening || !_initialized) return;
 
     _listening = true;
 
@@ -130,9 +130,18 @@ class VoiceController {
     }
   }
 
+  /// Detiene el motor de voz por completo y limpia el estado.
+  /// Se debe llamar al cerrar sesión para liberar el micrófono.
+  void stopService() {
+    _initialized = false;
+    _listening = false;
+    _speech.stop();
+    print("Servicio de voz desactivado.");
+  }
+
   // Detiene el motor de voz y libera los recursos asociados.
   void dispose() {
-    _speech.stop();
+    stopService();
   }
 }
 

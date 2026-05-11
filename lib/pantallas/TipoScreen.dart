@@ -144,7 +144,7 @@ class _TipoScreenState extends State<TipoScreen> {
   /**
    * Muestra un diálogo de confirmación antes de cerrar la sesión del usuario.
    * Si el usuario acepta, se invoca el funcion signOut de Firebase Auth.
-    */
+   */
   void _cerrarSesion() {
     showDialog(
       context: context,
@@ -156,8 +156,11 @@ class _TipoScreenState extends State<TipoScreen> {
         actions: [
           TextButton(
             onPressed: () async {
+              voiceController.stopService(); //Desactivamos el control por voz
               await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pop();
+              if (mounted) {
+                Navigator.pushNamedAndRemoveUntil(context, '/loginScreen', (route) => false);
+              }
             },
             child: const Text('Aceptar'),
           ),
