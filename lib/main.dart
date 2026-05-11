@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         '/detailsScreen': (context) => DetailsScreen(),
         '/pasosScreen': (context) => PasosScreen(),
         '/userScreen': (context) => UsuarioScreen(),
-        '/principalScreen': (context) => PrincipalScreen(),
+        '/principalScreen': (context) => const PrincipalScreen(),
       },
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),

@@ -242,6 +242,8 @@ class _PasosScreentState extends State<PasosScreen> {
           'platosPreparados': FieldValue.increment(1),
         }, SetOptions(merge: true));
 
+        userProvider.incrementarPlatosHoy();
+
         print("Incremento realizado con éxito");
       } else {
         print("No se pudo realizar el incremento: Usuario no identificado");

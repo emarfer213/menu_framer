@@ -89,10 +89,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     try {
-                      // Intento de autenticación con Firebase.
                       await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo, password: contrasenia);
+                      if (mounted) {
+                        Navigator.pushNamedAndRemoveUntil(context, '/principalScreen', (route) => false);
+                      }
                     } on FirebaseAuthException catch (e) {
-                      // Manejo de errores de autenticación.
                       setState(() {
                         errorMesage = "Valores introducidos incorrectos";
                       });

@@ -156,8 +156,11 @@ class _TipoScreenState extends State<TipoScreen> {
         actions: [
           TextButton(
             onPressed: () async {
+              voiceController.stopService(); //Desactivamos el control por voz
               await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pop();
+              if (mounted) {
+                Navigator.pushNamedAndRemoveUntil(context, '/loginScreen', (route) => false);
+              }
             },
             child: const Text('Aceptar'),
           ),
