@@ -44,4 +44,53 @@ class UserProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  /// Método para iniciar sesión
+  Future<String?> login(String email, String password) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      return null; // Éxito
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found' || e.code == 'wrong-password' || e.code == 'invalid-credential') {
+        return "Correo o contraseña incorrectos";
+      }
+      return e.message ?? "Error al iniciar sesión";
+    } catch (e) {
+      return "Ocurrió un error inesperado";
+    }
+  }
+
+  /// Método para registrar un nuevo usuario
+  Future<String?> register(String email, String password, String nombre) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (userCredential.user != null) {
+        await FirebaseFirestore.instance.collection('usuarios').doc(userCredential.user!.uid).set({
+          'uid': userCredential.user!.uid,
+          'nombre': nombre,
+          'correo': email,
+          'platosPreparados': 0,
+        });
+      }
+      return null; // Éxito
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        return "El correo ya está en uso";
+      } else if (e.code == 'weak-password') {
+        return "La contraseña es muy débil";
+      }
+      return e.message ?? "Error en el registro";
+    } catch (e) {
+      return "Ocurrió un error inesperado";
+    }
+  }
+
+  /// Método para cerrar sesión
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
+  }
 }
