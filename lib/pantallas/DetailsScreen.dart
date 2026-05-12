@@ -122,12 +122,18 @@ class _detailsScreentState extends State<DetailsScreen> {
                       const Center(
                         child: Text(
                           'Los ingredientes necesarios para la preparacion seran:',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          textAlign: TextAlign.center,
                         ),
                       ),
 
                       ...platoCompleto.ingredientes.map(
-                        (ingrediente) => Center(child: Text("• ${ingrediente.nombre}: ${ingrediente.medida}")),
+                        (ingrediente) => Center(
+                          child: Text(
+                            "• ${ingrediente.nombre}: ${ingrediente.medida}",
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ),
                       ),
                     ],
                   ),

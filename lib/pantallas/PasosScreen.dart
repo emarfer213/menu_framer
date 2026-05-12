@@ -22,7 +22,7 @@ class _PasosScreentState extends State<PasosScreen> {
   final CarouselSliderController _controller = CarouselSliderController(); // Controlador del carrusel.
   late Future<Plato?> platoFuture; // Futuro que su utilizara para obtener las instrucciones del plato.
   int _currentSlide = 0; // Índice de la diapositiva en la cual inicia el carrusel.
-  int _elapsedSeconds = 0; // Segundos transcurridos desde que se entró en el paso actual.
+  final Map<int, int> _pageTimes = {}; // Almacena los segundos acumulados por cada índice de página.
   Timer? _timer; // Referencia al temporizador periódico que actualiza el contador cada segundo.
 
   @override
@@ -41,10 +41,8 @@ class _PasosScreentState extends State<PasosScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     // Obtenemos el objeto Plato pasado como argumento desde la pantalla de detalles.
     final Plato plato = ModalRoute.of(context)?.settings.arguments as Plato;
-
     // Iniciamos la petición para obtener el detalle completo del plato para posteriormente obtener las instrucciones.
     platoFuture = MenuProvider().getMealDetail(plato.id);
   }
@@ -52,29 +50,23 @@ class _PasosScreentState extends State<PasosScreen> {
   // Manejador de comandos de voz específicos para la fase de preparación.
   Future<void> _handleVoiceCommand(String texto) async {
     if (!mounted) return;
-
     texto = texto.toLowerCase().trim();
 
     print("PasosScreen recibió comando de voz: $texto");
-
     // Comando "terminar": Finaliza el proceso y vuelve a la pantalla inicial de tipos.
     if (texto.contains("terminar")) {
       await finalizarPLato();
       return;
     }
-
     // 3. Añadimos comandos para navegar por el carrusel
     if (texto.contains("siguiente")) {
       _controller.nextPage();
       return;
     }
-
     if (texto.contains("anterior")) {
       _controller.previousPage();
       return;
     }
-
-
     //Comandos de retroceso: Permiten volver a la pantalla de detalles del plato.
     if (texto.contains("volver") || texto.contains("atrás") || texto.contains("atras")) {
       if (Navigator.canPop(context)) {
@@ -89,13 +81,13 @@ class _PasosScreentState extends State<PasosScreen> {
    * Se ejecuta cada vez que el usuario cambia de diapositiva en el carrusel.
    */
   void _startTimer() {
-    _timer?.cancel();
-    _elapsedSeconds = 0;
+    if (_timer != null && _timer!.isActive) return;
 
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
       setState(() {
-        _elapsedSeconds++;
+        // Incrementamos el tiempo acumulado de la diapositiva que está activa en este momento
+        _pageTimes[_currentSlide] = (_pageTimes[_currentSlide] ?? 0) + 1;
       });
     });
   }
@@ -158,7 +150,7 @@ class _PasosScreentState extends State<PasosScreen> {
                             children: [
                               //Imagen de fondo y texto de la instrucción
                               Container(
-                                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 100),
+                                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
                                 height: double.infinity,
                                 width: MediaQuery.of(context).size.width,
                                 margin: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -175,7 +167,7 @@ class _PasosScreentState extends State<PasosScreen> {
                                     instruccion,
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w500,
                                       shadows: [Shadow(blurRadius: 6, color: Colors.white, offset: Offset(2, 2))],
                                     ),
@@ -207,7 +199,7 @@ class _PasosScreentState extends State<PasosScreen> {
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                                     color: Colors.black54,
                                     child: Text(
-                                      "Tiempo: $_elapsedSeconds s",
+                                      "Tiempo: ${_pageTimes[index] ?? 0} s",
                                       style: const TextStyle(color: Colors.white),
                                     ),
                                   ),
