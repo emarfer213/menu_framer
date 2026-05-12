@@ -3,11 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserProvider extends ChangeNotifier {
+  // 1. Definimos las instancias privadas
+  final FirebaseAuth _auth;
+  final FirebaseFirestore _firestore;
+
   User? _user;
   Map<String, dynamic>? _userData;
 
   /// Contador de platos realizados en la sesión actual (hoy).
-  /// Esta variable es volátil y se reinicia al cerrar sesión o cerrar la app.
   int _platosHoy = 0;
 
   User? get user => _user;
@@ -16,16 +19,19 @@ class UserProvider extends ChangeNotifier {
 
   bool get isLoading => _user != null && _userData == null;
 
-  UserProvider() {
-    // Escuchamos los cambios de sesión (Login/Logout)
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+  // 2. Constructor con Inyección de Dependencias
+  // Si no se pasan instancias (como en la app real), usa las de por defecto.
+  UserProvider({FirebaseAuth? auth, FirebaseFirestore? firestore})
+      : _auth = auth ?? FirebaseAuth.instance,
+        _firestore = firestore ?? FirebaseFirestore.instance {
+
+    // Escuchamos los cambios de sesión usando la instancia inyectada
+    _auth.authStateChanges().listen((User? user) {
       _user = user;
       if (user != null) {
-        // Si hay usuario, escuchamos sus datos de Firestore en tiempo real
         _listenToUserData(user.uid);
       } else {
         _userData = null;
-        // Reiniciamos el contador de la sesión al cerrar sesión
         _platosHoy = 0;
         notifyListeners();
       }
@@ -38,17 +44,18 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // 3. Usamos _firestore en lugar de FirebaseFirestore.instance
   void _listenToUserData(String uid) {
-    FirebaseFirestore.instance.collection('usuarios').doc(uid).snapshots().listen((snapshot) {
+    _firestore.collection('usuarios').doc(uid).snapshots().listen((snapshot) {
       _userData = snapshot.data();
       notifyListeners();
     });
   }
 
-  /// Método para iniciar sesión
+  /// Método para iniciar sesión usando _auth
   Future<String?> login(String email, String password) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
       return null; // Éxito
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found' || e.code == 'wrong-password' || e.code == 'invalid-credential') {
@@ -60,16 +67,16 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  /// Método para registrar un nuevo usuario
+  /// Método para registrar un nuevo usuario usando _auth y _firestore
   Future<String?> register(String email, String password, String nombre) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       if (userCredential.user != null) {
-        await FirebaseFirestore.instance.collection('usuarios').doc(userCredential.user!.uid).set({
+        await _firestore.collection('usuarios').doc(userCredential.user!.uid).set({
           'uid': userCredential.user!.uid,
           'nombre': nombre,
           'correo': email,
@@ -89,8 +96,8 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  /// Método para cerrar sesión
+  /// Método para cerrar sesión usando _auth
   Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
+    await _auth.signOut();
   }
 }
