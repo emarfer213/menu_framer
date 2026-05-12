@@ -131,15 +131,22 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
             child: Icon(icon, color: color),
           ),
           const SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: const TextStyle(color: Colors.grey, fontSize: 14)),
-              Text(
-                value,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  overflow: TextOverflow.ellipsis, // Si el título es muy largo, pone "..."
+                ),
+                Text(
+                  value,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                  softWrap: true, // Permite que el texto baje a la siguiente línea
+                ),
+              ],
+            ),
           ),
         ],
       ),
