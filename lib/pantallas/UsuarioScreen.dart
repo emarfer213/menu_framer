@@ -20,12 +20,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: const Text('Mi Perfil'),
-        backgroundColor: Colors.amber,
-        centerTitle: true,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Mi Perfil'), backgroundColor: Colors.amber, centerTitle: true, elevation: 0),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -34,10 +29,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: Colors.amber,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
               ),
               padding: const EdgeInsets.only(bottom: 30),
               child: Column(
@@ -50,11 +42,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                   const SizedBox(height: 15),
                   Text(
                     datos?['correo'] ?? 'Cargando...',
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                 ],
               ),
@@ -73,6 +61,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                     value: "${datos?['platosPreparados'] ?? 0}",
                     color: Colors.orange,
                   ),
+                  const SizedBox(height: 15),
                   _buildInfoCard(
                     icon: Icons.restaurant,
                     title: "Platos preparados hoy",
@@ -113,9 +102,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                     backgroundColor: Colors.redAccent,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
               ),
@@ -128,50 +115,29 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   }
 
   /// Widget auxiliar para construir las tarjetas de información
-  Widget _buildInfoCard({
-    required IconData icon,
-    required String title,
-    required String value,
-    required Color color,
-  }) {
+  Widget _buildInfoCard({required IconData icon, required String title, required String value, required Color color}) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 5))],
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
+            decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
             child: Icon(icon, color: color),
           ),
           const SizedBox(width: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
-              ),
+              Text(title, style: const TextStyle(color: Colors.grey, fontSize: 14)),
               Text(
                 value,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
               ),
             ],
           ),
