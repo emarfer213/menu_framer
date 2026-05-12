@@ -87,6 +87,8 @@ class VoiceController {
     if (!_initialized) return;
     _listening = false;
 
+    _lastProcessed = "";
+
     await _speech.stop();
     await Future.delayed(const Duration(milliseconds: 300));
 

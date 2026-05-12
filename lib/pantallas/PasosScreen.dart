@@ -19,6 +19,7 @@ class PasosScreen extends StatefulWidget {
 }
 
 class _PasosScreentState extends State<PasosScreen> {
+  final CarouselSliderController _controller = CarouselSliderController(); // Controlador del carrusel.
   late Future<Plato?> platoFuture; // Futuro que su utilizara para obtener las instrucciones del plato.
   int _currentSlide = 0; // Índice de la diapositiva en la cual inicia el carrusel.
   int _elapsedSeconds = 0; // Segundos transcurridos desde que se entró en el paso actual.
@@ -61,6 +62,18 @@ class _PasosScreentState extends State<PasosScreen> {
       await finalizarPLato();
       return;
     }
+
+    // 3. Añadimos comandos para navegar por el carrusel
+    if (texto.contains("siguiente")) {
+      _controller.nextPage();
+      return;
+    }
+
+    if (texto.contains("anterior")) {
+      _controller.previousPage();
+      return;
+    }
+
 
     //Comandos de retroceso: Permiten volver a la pantalla de detalles del plato.
     if (texto.contains("volver") || texto.contains("atrás") || texto.contains("atras")) {
@@ -120,12 +133,10 @@ class _PasosScreentState extends State<PasosScreen> {
                 // CARRUSEL PRINCIPAL
                 Expanded(
                   child: CarouselSlider(
+                    carouselController: _controller, // ASIGNAMOS EL CONTROLADOR
                     options: CarouselOptions(
                       height: double.infinity,
-                      autoPlay: true,
-                      // El carrusel avanza solo
-                      autoPlayInterval: const Duration(seconds: 60),
-                      // Un minuto por paso por defecto
+                      autoPlay: false,
                       autoPlayAnimationDuration: const Duration(seconds: 2),
                       onPageChanged: (index, reason) {
                         setState(() {
