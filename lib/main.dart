@@ -45,16 +45,15 @@ class MyApp extends StatelessWidget {
         '/userScreen': (context) => UsuarioScreen(),
         '/principalScreen': (context) => const PrincipalScreen(),
       },
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      home: Consumer<UserProvider>(
+        builder: (context, userProv, _) {
+          if (userProv.user == null) {
+            return const LoginScreen();
+          }
+          if (userProv.isLoading) {
             return const Scaffold(body: Center(child: CircularProgressIndicator()));
           }
-          if (snapshot.hasData) {
-            return const PrincipalScreen();
-          }
-          return const LoginScreen();
+          return const PrincipalScreen();
         },
       ),
     );

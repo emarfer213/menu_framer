@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/UserProvider.dart';
 
 // Pantalla que permite a los nuevos usuarios registrarse en la aplicación.
 class RegisterScreen extends StatefulWidget {
@@ -144,39 +147,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   // Botón de acción para realizar el registro.
                   ElevatedButton.icon(
+                    // lib/pantallas/RegisterScreen.dart
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        try {
-                          // Usamos createUserWithEmailAndPassword para registrar nuevos usuarios.
-                          UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                            email: correo,
-                            password: contrasenia,
-                          );
+                        // Obtenemos el provider sin escuchar cambios (listen: false)
+                        final userProvider = Provider.of<UserProvider>(context, listen: false);
+                        // Llamamos al método register que centraliza FirebaseAuth y Firestore
+                        String? error = await userProvider.register(correo, contrasenia, nombre);
 
-                          if (userCredential.user != null) {
-                            await FirebaseFirestore.instance.collection('usuarios').doc(userCredential.user!.uid).set({
-                              'uid': userCredential.user!.uid,
-                              'nombre': nombre,
-                              'correo': correo,
-                              'platosPreparados': 0,
-                            });
-                          }
-
-                          if (mounted) Navigator.pop(context);
-
-                          // Una vez registrado, Firebase suele loguear al usuario automáticamente.
-                        } on FirebaseAuthException catch (e) {
+                        if (error != null) {
                           setState(() {
-                            // Manejo de errores diversos que puede dar firebase.
-                            if (e.code == 'email-already-in-use') {
-                              errorMesage = "El correo ya está en uso";
-                            } else if (e.code == 'weak-password') {
-                              errorMesage = "La contraseña es muy débil";
-                            } else {
-                              errorMesage = "Error en el registro";
-                            }
+                            errorMesage = error;
                           });
                           _formKey.currentState!.validate();
+                        } else {
+                          if (mounted) Navigator.pop(context);
                         }
                       }
                     },

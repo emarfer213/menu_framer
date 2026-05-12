@@ -16,7 +16,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   Widget build(BuildContext context) {
     // Consumimos los datos del UserProvider (que vienen de Firestore en tiempo real)
     final userProvider = Provider.of<UserProvider>(context);
-    final datos = userProvider.userData;
+    final datos = context.watch<UserProvider>().userData;
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -24,7 +24,6 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Cabecera con Avatar
             Container(
               width: double.infinity,
               decoration: const BoxDecoration(
