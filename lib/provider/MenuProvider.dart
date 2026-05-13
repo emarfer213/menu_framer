@@ -4,10 +4,13 @@ import 'package:http/http.dart' as http;
 import 'package:menu_framer/models/plato.dart';
 
 class MenuProvider extends ChangeNotifier {
+  final http.Client _httpClient;
   static const String baseUrl = "https://69b69520583f543fbd9e0c5e.mockapi.io/api/menu/platos";
 
+  MenuProvider({http.Client? httpClient}) : _httpClient = httpClient ?? http.Client();
+
   Future<List<Plato>> getMealsByCategory(String category) async {
-    final response = await http.get(Uri.parse(baseUrl));
+    final response = await _httpClient.get(Uri.parse(baseUrl));
 
     if (response.statusCode == 200) {
       final List data = json.decode(response.body);

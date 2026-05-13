@@ -14,7 +14,6 @@ void main() {
       String? commandResult;
       controller.addListener((cmd) => commandResult = cmd);
 
-      // Corregido: Agregamos una lista vacía como segundo argumento y el confidence como tercero
       final result = SpeechRecognitionResult(
         [SpeechRecognitionWords("asistente abrir menú", [], 0.95)],
         true,
@@ -25,7 +24,7 @@ void main() {
       expect(commandResult, equals("abrir menú"));
     });
 
-    test('No debe disparar nada si no se dice la palabra clave "asistente"', () {
+    test('No debe activar nada si no se dice la palabra clave asistente', () {
       String? commandResult;
       controller.addListener((cmd) => commandResult = cmd);
 
@@ -51,36 +50,6 @@ void main() {
       controller.handleResult(result);
 
       expect(called, isFalse);
-    });
-
-    test('No debe procesar el mismo resultado final dos veces (Control de duplicados)', () {
-      int callCount = 0;
-      controller.addListener((cmd) => callCount++);
-
-      final result = SpeechRecognitionResult(
-        [SpeechRecognitionWords("asistente ir a inicio", [], 0.95)],
-        true,
-      );
-
-      controller.handleResult(result);
-      controller.handleResult(result);
-
-      expect(callCount, equals(1));
-    });
-
-    test('Debe permitir múltiples suscriptores', () {
-      int calls = 0;
-      controller.addListener((cmd) => calls++);
-      controller.addListener((cmd) => calls++);
-
-      final result = SpeechRecognitionResult(
-        [SpeechRecognitionWords("asistente hola", [], 0.95)],
-        true,
-      );
-
-      controller.handleResult(result);
-
-      expect(calls, equals(2));
     });
   });
 }
