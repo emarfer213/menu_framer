@@ -40,7 +40,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                   ),
                   const SizedBox(height: 15),
                   Text(
-                    datos?['correo'] ?? 'Cargando...',
+                    datos?['nombre'] ?? 'Cargando...',
                     style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                 ],
