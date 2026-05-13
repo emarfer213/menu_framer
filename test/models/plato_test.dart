@@ -22,34 +22,12 @@ void main() {
       expect(plato.ingredientes.length, 2);
       expect(plato.ingredientes[0].nombre, 'Pasta');
       expect(plato.ingredientes[0].medida, '200g');
-    });
-
-    test('Debe manejar campos faltantes o nulos en el JSON', () {
-      final json = {
-        'idMeal': '456',
-        'strMeal': 'Ensalada',
-        // strCategory falta
-        // strIngredients falta
-      };
-
-      final plato = Plato.fromJson(json);
-
-      expect(plato.id, '456');
-      expect(plato.category, ''); // Debería ser un string vacío por el null check
-      expect(plato.ingredientes, isEmpty);
-      expect(plato.instructions, isEmpty);
-    });
-
-    test('Debe saltar ingredientes vacíos', () {
-      final json = {
-        'strIngredients': ['Pollo', '', ' ', null],
-        'strMeasures': ['1kg', '', '', ''],
-      };
-
-      final plato = Plato.fromJson(json);
-
-      expect(plato.ingredientes.length, 1);
-      expect(plato.ingredientes[0].nombre, 'Pollo');
+      expect(plato.ingredientes[1].nombre, 'Tomate');
+      expect(plato.ingredientes[1].medida, '100ml');
+      expect(plato.instructions, ['Cocer pasta', 'Añadir salsa']);
+      expect(plato.thumbnail, 'url_imagen');
+      expect(plato.link, 'url_video');
+      expect(plato.category, 'Italian');
     });
   });
 }

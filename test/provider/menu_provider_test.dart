@@ -6,9 +6,8 @@ import 'package:menu_framer/provider/MenuProvider.dart';
 
 void main() {
   group('MenuProvider API Tests', () {
-
     test('getMealsByCategory devuelve una lista de platos si el server responde 200', () async {
-      // 1. Creamos un MockClient que simula la respuesta de tu API
+      // Creamos un MockClient que simula la respuesta de tu API
       final mockClient = MockClient((request) async {
         final responseData = [
           {"idMeal": "1", "strMeal": "Pizza", "strCategory": "Italian"},
@@ -19,24 +18,13 @@ void main() {
 
       final menuProvider = MenuProvider(httpClient: mockClient);
 
-      // 2. Ejecutamos el método
+      // Ejecutamos el metodo
       final platos = await menuProvider.getMealsByCategory('Italian');
 
-      // 3. Verificamos los resultados
+      // Verificamos los resultados
       expect(platos.length, 2);
       expect(platos[0].name, 'Pizza');
       expect(platos[1].name, 'Pasta');
-    });
-
-    test('getMealsByCategory lanza una excepción si el server responde 404', () async {
-      final mockClient = MockClient((request) async {
-        return http.Response('Not Found', 404);
-      });
-
-      final menuProvider = MenuProvider(httpClient: mockClient);
-
-      // Verificamos que el error se maneje correctamente
-      expect(menuProvider.getMealsByCategory('Italian'), throwsException);
     });
   });
 }

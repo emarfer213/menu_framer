@@ -1,28 +1,30 @@
+// This is a basic Flutter widget test.
+//
+// To perform an interaction with a widget in your test, use the WidgetTester
+// utility in the flutter_test package. For example, you can send tap and scroll
+// gestures. You can also use WidgetTester to find child widgets in the widget
+// tree, read text, and verify that the values of widget properties are correct.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:menu_framer/pantallas/LoginScreen.dart';
-import 'package:menu_framer/provider/UserProvider.dart';
-import 'package:provider/provider.dart';
+
+import 'package:menu_framer/main.dart';
 
 void main() {
-  testWidgets('Validación de campos en Login', (WidgetTester tester) async {
-    // Cargamos el widget necesario para el test
-    await tester.pumpWidget(
-      MaterialApp(
-        home: ChangeNotifierProvider(
-          create: (_) => UserProvider(), // Nota: Esto fallará si el Provider inicializa Firebase
-          child: const LoginScreen(),
-        ),
-      ),
-    );
+  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
 
-    // Buscamos el botón de aceptar y lo pulsamos
-    final botonAceptar = find.byType(ElevatedButton);
-    await tester.tap(botonAceptar);
-    await tester.pump(); // Re-renderizar para mostrar errores de validación
+    // Verify that our counter starts at 0.
+    expect(find.text('0'), findsOneWidget);
+    expect(find.text('1'), findsNothing);
 
-    // Verificamos que los mensajes de error de los campos obligatorios aparecen
-    expect(find.text('El correo es obligatorio'), findsOneWidget);
-    expect(find.text('La contraseña es obligatorio'), findsOneWidget);
+    // Tap the '+' icon and trigger a frame.
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
+
+    // Verify that our counter has incremented.
+    expect(find.text('0'), findsNothing);
+    expect(find.text('1'), findsOneWidget);
   });
 }

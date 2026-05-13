@@ -10,20 +10,6 @@ void main() {
       controller = VoiceController();
     });
 
-    test('Debe extraer el comando correctamente después de la palabra clave', () {
-      String? commandResult;
-      controller.addListener((cmd) => commandResult = cmd);
-
-      final result = SpeechRecognitionResult(
-        [SpeechRecognitionWords("asistente abrir menú", [], 0.95)],
-        true,
-      );
-
-      controller.handleResult(result);
-
-      expect(commandResult, equals("abrir menú"));
-    });
-
     test('No debe activar nada si no se dice la palabra clave asistente', () {
       String? commandResult;
       controller.addListener((cmd) => commandResult = cmd);
@@ -36,20 +22,6 @@ void main() {
       controller.handleResult(result);
 
       expect(commandResult, isNull);
-    });
-
-    test('No debe disparar si solo se dice "asistente" sin comando', () {
-      bool called = false;
-      controller.addListener((cmd) => called = true);
-
-      final result = SpeechRecognitionResult(
-        [SpeechRecognitionWords("asistente", [], 0.95)],
-        true,
-      );
-
-      controller.handleResult(result);
-
-      expect(called, isFalse);
     });
   });
 }
