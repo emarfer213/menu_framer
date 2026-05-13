@@ -150,10 +150,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     // lib/pantallas/RegisterScreen.dart
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Obtenemos el provider sin escuchar cambios (listen: false)
-                        final userProvider = Provider.of<UserProvider>(context, listen: false);
                         // Llamamos al método register que centraliza FirebaseAuth y Firestore
-                        String? error = await userProvider.register(correo, contrasenia, nombre);
+                        String? error = await UserProvider().register(correo, contrasenia, nombre);
 
                         if (error != null) {
                           setState(() {
