@@ -6,8 +6,7 @@ class UserProvider extends ChangeNotifier {
   User? _user;
   Map<String, dynamic>? _userData;
 
-  /// Contador de platos realizados en la sesión actual (hoy).
-  /// Esta variable es volátil y se reinicia al cerrar sesión o cerrar la app.
+  // Contador de platos realizados en la sesión actual.
   int _platosHoy = 0;
 
   User? get user => _user;
@@ -32,7 +31,7 @@ class UserProvider extends ChangeNotifier {
     });
   }
 
-  /// Incrementa el contador de platos de la sesión actual.
+  // Incrementa el contador de platos de la sesión actual.
   void incrementarPlatosHoy() {
     _platosHoy++;
     notifyListeners();
@@ -45,7 +44,7 @@ class UserProvider extends ChangeNotifier {
     });
   }
 
-  /// Método para iniciar sesión
+  // Metodo para iniciar sesión
   Future<String?> login(String email, String password) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
@@ -60,7 +59,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  /// Método para registrar un nuevo usuario
+  // Metodo para registrar un nuevo usuario
   Future<String?> register(String email, String password, String nombre) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -89,7 +88,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  /// Método para cerrar sesión
+  // Metodo para cerrar sesión
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
   }
