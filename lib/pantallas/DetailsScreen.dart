@@ -3,7 +3,7 @@ import 'package:menu_framer/models/VideoDialog.dart';
 
 import '../models/plato.dart';
 import '../provider/MenuProvider.dart';
-import '../provider/voiceControler.dart';
+import '../provider/VoiceControler.dart';
 
 class DetailsScreen extends StatefulWidget {
   @override

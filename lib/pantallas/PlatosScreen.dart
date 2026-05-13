@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/plato.dart';
 import '../provider/MenuProvider.dart';
-import '../provider/voiceControler.dart';
+import '../provider/VoiceControler.dart';
 
 /**
  * Pantalla que muestra un listado de platos filtrados por una categoría específica.

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../provider/voiceControler.dart';
+import '../provider/VoiceControler.dart';
 
 /** Pantalla que permite al usuario seleccionar el tipo de plato (Entrante, Primer plato, etc.).
  * Esta pantalla integra control por voz para facilitar la navegación mediante comandos por voz.

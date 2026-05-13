@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/UserProvider.dart';
-import '../provider/voiceControler.dart';
+import '../provider/VoiceControler.dart';
 
 class UsuarioScreen extends StatefulWidget {
   const UsuarioScreen({super.key});

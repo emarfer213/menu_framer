@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import '../models/plato.dart';
 import '../provider/MenuProvider.dart';
 import '../provider/UserProvider.dart';
-import '../provider/voiceControler.dart';
+import '../provider/VoiceControler.dart';
 
 class PasosScreen extends StatefulWidget {
   const PasosScreen({super.key});
