@@ -16,7 +16,6 @@ class PlatoScreen extends StatefulWidget {
 }
 
 class _PlatoScreenState extends State<PlatoScreen> {
-  final MenuProvider _service = MenuProvider();// Instancia del proveedor de datos del menú.
   late Future<List<Plato>> _meals;// Futuro que contendrá la lista de platos cargados desde la API.
   late final String tipo; // Categoría de platos a mostrar (ej. "Starter", "Pork").
   bool _isInit = true;
@@ -44,7 +43,7 @@ class _PlatoScreenState extends State<PlatoScreen> {
     // Recuperamos la categoría pasada como argumento y disparamos la petición.
     if (_isInit) {
       tipo = ModalRoute.of(context)?.settings.arguments as String;
-      _meals = _service.getMealsByCategory(tipo);
+      _meals = MenuProvider().getMealsByCategory(tipo);
       _isInit = false;
     }
   }

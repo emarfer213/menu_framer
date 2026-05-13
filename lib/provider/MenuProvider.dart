@@ -25,23 +25,6 @@ class MenuProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<Plato>> searchMeals(String query) async {
-    final response = await http.get(Uri.parse(baseUrl));
-
-    if (response.statusCode == 200) {
-      final List data = json.decode(response.body);
-      final filteredMeals = data
-          .where(
-            (meal) => meal['strMeal'] != null && meal['strMeal'].toString().toLowerCase().contains(query.toLowerCase()),
-          )
-          .toList();
-
-      return filteredMeals.map((json) => Plato.fromJson(json)).toList();
-    } else {
-      throw Exception("Error al buscar comidas");
-    }
-  }
-
   Future<Plato?> getMealDetail(String id) async {
     final response = await http.get(Uri.parse(baseUrl));
 
