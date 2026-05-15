@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoDialog extends StatefulWidget {
   final String videoUrl;
 
-  const VideoDialog({required this.videoUrl});
+  const VideoDialog({super.key, required this.videoUrl});
 
   @override
   State<VideoDialog> createState() => _VideoDialogState();
@@ -17,21 +17,61 @@ class _VideoDialogState extends State<VideoDialog> {
   void initState() {
     super.initState();
 
-    final videoId = YoutubePlayerController.convertUrlToId(widget.videoUrl)!;
+    // Extraemos el ID del video de la URL
+    final videoId = YoutubePlayer.convertUrlToId(widget.videoUrl);
 
-    _controller = YoutubePlayerController.fromVideoId(
-      videoId: videoId,
-      autoPlay: true,
-      params: const YoutubePlayerParams(showFullscreenButton: true),
+    _controller = YoutubePlayerController(
+      initialVideoId: videoId ?? '',
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+        isLive: false,
+        forceHD: false,
+        enableCaption: true,
+      ),
     );
+  }
+
+  @override
+  void deactivate() {
+    // Pausa el video cuando el diálogo se cierra o el widget deja de estar activo
+    _controller.pause();
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    // Liberamos los recursos del controlador
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: YoutubePlayer(controller: _controller),
+      // Añadimos un pequeño margen lateral para que no toque los bordes de la pantalla
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+      child: YoutubePlayerBuilder(
+        player: YoutubePlayer(
+          controller: _controller,
+          showVideoProgressIndicator: true,
+          progressIndicatorColor: Colors.amber,
+          progressColors: const ProgressBarColors(
+            playedColor: Colors.amber,
+            handleColor: Colors.amberAccent,
+          ),
+          onReady: () {
+            debugPrint('El reproductor de YouTube está listo.');
+          },
+        ),
+        builder: (context, player) {
+          return Column(
+            mainAxisSize: MainAxisSize.min, // El diálogo se ajusta al tamaño del video
+            children: [
+              player,
+            ],
+          );
+        },
       ),
     );
   }
