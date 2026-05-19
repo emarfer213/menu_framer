@@ -18,7 +18,6 @@ class MenuProvider extends ChangeNotifier {
                 meal['strCategory'] != null && meal['strCategory'].toString().toLowerCase() == category.toLowerCase(),
           )
           .toList();
-
       return filteredMeals.map((json) => Plato.fromJson(json)).toList();
     } else {
       throw Exception("Error al cargar comidas");
@@ -26,11 +25,10 @@ class MenuProvider extends ChangeNotifier {
   }
 
   Future<Plato?> getMealDetail(String id) async {
-    final response = await http.get(Uri.parse(baseUrl));
+    final response = await http.get(Uri.parse("$baseUrl/$id"));
 
     if (response.statusCode == 200) {
-      final List data = json.decode(response.body);
-      final mealJson = data.firstWhere((meal) => meal['idMeal'] == id, orElse: () => null);
+      final mealJson = json.decode(response.body);
 
       if (mealJson == null) return null;
 
