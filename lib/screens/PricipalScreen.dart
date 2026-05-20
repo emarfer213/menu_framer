@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:menu_framer/pantallas/TipoScreen.dart';
-import 'package:menu_framer/pantallas/UsuarioScreen.dart';
+import 'package:menu_framer/screens/TipoScreen.dart';
+import 'package:menu_framer/screens/UsuarioScreen.dart';
 
 class PrincipalScreen extends StatefulWidget {
   const PrincipalScreen({super.key});

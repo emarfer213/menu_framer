@@ -33,7 +33,7 @@ class _TipoScreenState extends State<TipoScreen> {
   @override
   void dispose() {
     /** Es fundamental eliminar el listener para evitar fugas de memoria y
-     * ejecuciones de comandos en pantallas que ya no están visibles.
+     * ejecuciones de comandos en screens que ya no están visibles.
      */
     voiceController.removeListener(_handleVoiceCommand);
     super.dispose();
