@@ -47,7 +47,7 @@ class _detailsScreentState extends State<DetailsScreen> {
    * Si dice "volver" o "atrás", regresa a la pantalla anterior.
    */
   void _handleVoiceCommand(String texto) {
-    if (!mounted) return;
+    if (!mounted || !(ModalRoute.of(context)?.isCurrent ?? false)) return;
 
     texto = texto.toLowerCase().trim();
 

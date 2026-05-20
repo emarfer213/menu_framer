@@ -53,7 +53,7 @@ class _PlatoScreenState extends State<PlatoScreen> {
    * Recibe el texto reconocido por el VoiceController y lo delega a la lógica de búsqueda.
     */
   void _handleVoiceCommand(String texto) {
-    if (!mounted) return;
+    if (!mounted || !(ModalRoute.of(context)?.isCurrent ?? false)) return;
     _buscarPlatoPorVoz(texto);
   }
 

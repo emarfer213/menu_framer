@@ -45,7 +45,8 @@ class _TipoScreenState extends State<TipoScreen> {
    * categorías de platos y navega a la pantalla correspondiente.
    */
   void _handleVoiceCommand(String texto) {
-    if (!mounted) return;
+    // Verificamos si el widget sigue montado y si es la pantalla que el usuario está viendo actualmente.
+    if (!mounted || !(ModalRoute.of(context)?.isCurrent ?? false)) return;
 
     texto = texto.toLowerCase().trim();
 

@@ -49,7 +49,7 @@ class _PasosScreentState extends State<PasosScreen> {
 
   // Manejador de comandos de voz específicos para la fase de preparación.
   Future<void> _handleVoiceCommand(String texto) async {
-    if (!mounted) return;
+    if (!mounted || !(ModalRoute.of(context)?.isCurrent ?? false)) return;
     texto = texto.toLowerCase().trim();
 
     print("PasosScreen recibió comando de voz: $texto");
