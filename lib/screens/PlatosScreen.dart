@@ -116,8 +116,7 @@ class _PlatoScreenState extends State<PlatoScreen> {
     final textoLimpio = texto.toLowerCase().trim();
 
     //Permite regresar a la selección de categorías.
-    if (textoLimpio.contains("atrás") || textoLimpio.contains("atras") || textoLimpio.contains("regresar")) {
-      print("Retrocediendo pantalla");
+    if (texto.contains("volver") || texto.contains("atrás") || texto.contains("atras")) {
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }
